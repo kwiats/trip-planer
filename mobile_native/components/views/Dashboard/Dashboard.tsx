@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { styles } from './styles';
-import MapboxBoard from './components/MapboxBoard';
+import MapboxBoard from './components/MapboxBoard.tsx';
 
 const Dashboard = () => {
   return (
