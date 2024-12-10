@@ -57,4 +57,16 @@ export const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: 10,
   },
+  zoomControls: {
+    position: 'absolute',
+    top: 130,
+    left: 10,
+    flexDirection: 'column',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: 8,
+    padding: 5,
+  },
+  spacer: {
+    height: 10,
+  },
 });

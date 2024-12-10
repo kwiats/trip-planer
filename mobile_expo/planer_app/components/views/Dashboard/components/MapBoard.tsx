@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, PermissionsAndroid, Platform, View } from 'react-native';
-import MapView, { Marker, UrlTile } from 'react-native-maps';
-import Geolocation from 'react-native-geolocation-service';
+import { Alert, Button, PermissionsAndroid, Platform, View } from 'react-native';
+import MapView, { Marker, PROVIDER_DEFAULT, UrlTile } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { styles } from '../styles';
 import Search from './Search';
@@ -9,14 +8,19 @@ import BottomPanel from './BottomPanel';
 import { fetchAttractions } from '../api/attractionsApi';
 
 const OsmBoard = () => {
-  const [location, setLocation] = useState<any>(null); // Bieżąca lokalizacja użytkownika
+  const [location, setLocation] = useState<boolean>(false);
+  const [region, setRegion] = useState({
+    latitude: 20.78825,
+    longitude: 50.4324,
+    latitudeDelta: 0.05,
+    longitudeDelta: 0.05,
+  });
   const [attractions, setAttractions] = useState<any>([]);
   const [panelVisible, setPanelVisible] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
 
   useEffect(() => {
-    console.log('efect');
     if (Platform.OS === 'android') {
       PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
         title: 'Permission to access location',
@@ -52,31 +56,39 @@ const OsmBoard = () => {
 
     Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High })
       .then((location) => {
-          setLocation({
+          setRegion({
+            ...region,
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
           });
-        console.log('localization success');
-          console.log(location.coords);
+          setLocation(true)
+        console.log('correct located ', location.coords);
         }
       ) .catch((err) => {
       Alert.alert('Error', err.message);
       console.log(err.message);
     });
+  };
 
-    // Geolocation.getCurrentPosition(
-    //   (position) => {
-    //     const { latitude, longitude } = position.coords;
-    //     console.log({ latitude, longitude });
-    //     setLocation({ latitude, longitude });
-    //   },
-    //   (error) => Alert.alert('Error', error.message),
-    //   { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-    // );
+
+  const zoomIn = () => {
+    setRegion((prevRegion) => ({
+      ...prevRegion,
+      latitudeDelta: prevRegion.latitudeDelta / 2,
+      longitudeDelta: prevRegion.longitudeDelta / 2,
+    }));
+  };
+
+  const zoomOut = () => {
+    setRegion((prevRegion) => ({
+      ...prevRegion,
+      latitudeDelta: prevRegion.latitudeDelta * 2,
+      longitudeDelta: prevRegion.longitudeDelta * 2,
+    }));
   };
 
   const onCategoryChange = async (category: string) => {
-    console.log('Zmiana kategorii', category, searchText);
+    console.log('Category change', category, searchText);
     setSelectedCategory(category);
     try {
       const attractions = await fetchAttractions(searchText, category);
@@ -97,28 +109,20 @@ const OsmBoard = () => {
       {location && (
         <MapView
           style={styles.map}
-          region={{
-            latitude: location.latitude,
-            longitude: location.longitude,
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.05,
-          }}
-          // provider={null} // OSM używa domyślnego dostawcy
+          region={region}
+          provider={PROVIDER_DEFAULT}
         >
-          {/* Kafelki OpenStreetMap */}
           <UrlTile
             urlTemplate="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            maximumZ={19} // Maksymalne powiększenie mapy
+            maximumZ={25}
           />
 
-          {/* Marker bieżącej lokalizacji */}
           <Marker
-            coordinate={{ latitude: location.latitude, longitude: location.longitude }}
-            title="Twoja lokalizacja"
+            coordinate={{ latitude: region.latitude, longitude: region.longitude }}
+            title="Your localization"
             pinColor="blue"
           />
 
-          {/* Markery atrakcji */}
           {attractions.map((attraction: any) => (
             <Marker
               key={attraction.id}
@@ -131,6 +135,11 @@ const OsmBoard = () => {
           ))}
         </MapView>
       )}
+      <View style={styles.zoomControls}>
+        <Button title="+" onPress={zoomIn} />
+        <View style={styles.spacer} />
+        <Button title="-" onPress={zoomOut} />
+      </View>
       <BottomPanel
         isVisible={panelVisible}
         searchText={searchText}
