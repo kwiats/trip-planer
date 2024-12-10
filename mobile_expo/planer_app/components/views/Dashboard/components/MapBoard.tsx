@@ -10,8 +10,8 @@ import { fetchAttractions } from '../api/attractionsApi';
 const OsmBoard = () => {
   const [location, setLocation] = useState<boolean>(false);
   const [region, setRegion] = useState({
-    latitude: 20.78825,
-    longitude: 50.4324,
+    latitude: 52.2296756,
+    longitude: 21.0122287,
     latitudeDelta: 0.05,
     longitudeDelta: 0.05,
   });
@@ -98,10 +98,14 @@ const OsmBoard = () => {
     }
   };
 
+  const setNewRegion = (location: { latitude: number; longitude: number; }) => {
+    setRegion({...region, latitude: location.latitude, longitude: location.longitude });
+  }
+
   return (
     <View style={styles.container}>
       <Search
-        setLocation={setLocation}
+        setLocation={setNewRegion}
         fetchAttractions={fetchAttractions}
         setSearchText={setSearchText}
         searchText={searchText}

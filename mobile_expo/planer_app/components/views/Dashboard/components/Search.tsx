@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, Alert, Keyboard } from 'react-native';
 import { styles } from '../styles';
-import { fetchLocationFromMapbox } from '../api/mapboxApi';
+// import { fetchLocationFromMapbox } from '../api/mapboxApi';
 import { fetchAttractions } from '../api/attractionsApi';
+import { fetchLocationFromNominatim } from "../api/nominatimApi";
 
 const Search = ({ setLocation, setAttractions, setSearchText, searchText }: any) => {
   const handleSearch = () => {
-    fetchLocationFromMapbox(searchText)
+    fetchLocationFromNominatim(searchText)
       .then((location) => {
         setLocation(location);
-        return fetchAttractions(searchText);
+        // return fetchAttractions(searchText);
       })
-      .then((attractions) => {
-        setAttractions(attractions);
-      })
+      // .then((attractions) => {
+      //   setAttractions(attractions);
+      // })
       .catch((error) => {
         Alert.alert('Error', 'Failed to find location');
       });
