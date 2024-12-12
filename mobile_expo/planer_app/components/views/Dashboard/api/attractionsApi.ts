@@ -1,8 +1,4 @@
-interface Attraction {
-  id: number;
-  name: string;
-  description: string;
-}
+import {Attraction} from "../../Attractions/types";
 
 export const fetchAttractions = (
   city: string,

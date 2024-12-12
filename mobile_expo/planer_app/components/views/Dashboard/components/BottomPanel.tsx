@@ -4,9 +4,8 @@ import { Picker } from '@react-native-picker/picker';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { styles } from '../styles';
 import AttractionTile from '../../common/AttractionTile';
-interface Attraction {
-  place_name: string;
-}
+import { Attraction } from "../../Attractions/types";
+
 
 interface BottomPanelProps {
   isVisible: boolean;
@@ -58,10 +57,22 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
       </View>
       <BottomSheetScrollView>
         <View style={styles.attractionsGrid}>
-          {(attractions && attractions.length > 0 ? attractions : placeholderAttractions).map(
+          {(attractions && attractions.length > 0 ? attractions.map(
+            (attraction: Attraction) => (
+              <AttractionTile
+                key={attraction.id}
+                attraction={{
+                  place_name: attraction.name,
+                  place_description: attraction.description,
+                  place_category: attraction.category,
+                  place_rating: attraction.rating.toFixed(1)
+                }}
+              />
+            )
+          ) : placeholderAttractions.map(
             (attraction, index) => (
               <AttractionTile key={index} attraction={attraction} />
-            )
+            ))
           )}
         </View>
       </BottomSheetScrollView>

@@ -3,7 +3,7 @@ import { Attraction, Opinion } from "../types";
 export const fetchUserAttractions = async (
   id: number
 ): Promise<Attraction[]> => {
-  const url = `http://localhost/user/${id}/atrractions`;
+  const url = `http://localhost/user/${id}/attractions`;
   try {
     const response = await fetch(url);
     const data = await response.json();

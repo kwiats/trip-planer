@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import FiltersModal from './components/FiltersModal.tsx';
+import FiltersModal from './components/FiltersModal';
 import { attractionsExamples } from '../api/fake/apiMock';
 import AttractionTile from '../../common/AttractionTile';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -128,6 +128,7 @@ const AttractionSearchScreen: React.FC<{ navigation: NavigationProps }> = ({ nav
                   renderLeftActions={() => LeftSwipeActions(attraction)}>
                   <View>
                     <AttractionTile
+                      key={attraction.id}
                       attraction={{
                         place_name: attraction.name,
                         place_description: attraction.description,

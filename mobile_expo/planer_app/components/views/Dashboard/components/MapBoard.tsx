@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, PermissionsAndroid, Platform, View } from 'react-native';
+import { Alert, Button, ImageURISource, PermissionsAndroid, Platform, View } from 'react-native';
 import MapView, { Marker, PROVIDER_DEFAULT, UrlTile } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { styles } from '../styles';
 import Search from './Search';
 import BottomPanel from './BottomPanel';
 import { fetchAttractions } from '../api/attractionsApi';
+import { attractionsExamples } from '../../Attractions/api/fake/apiMock'
+import { Attraction } from "../../Attractions/types";
 
 const OsmBoard = () => {
   const [location, setLocation] = useState<boolean>(false);
@@ -15,7 +17,7 @@ const OsmBoard = () => {
     latitudeDelta: 0.05,
     longitudeDelta: 0.05,
   });
-  const [attractions, setAttractions] = useState<any>([]);
+  const [attractions, setAttractions] = useState<Attraction[]>(attractionsExamples);
   const [panelVisible, setPanelVisible] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -30,7 +32,6 @@ const OsmBoard = () => {
         buttonPositive: 'OK',
       }).then((granted) => {
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('granted')
           Location.requestForegroundPermissionsAsync().then((status) => {
             console.log('status', status.status)
             getCurrentLocation();
@@ -100,6 +101,7 @@ const OsmBoard = () => {
 
   const setNewRegion = (location: { latitude: number; longitude: number; }) => {
     setRegion({...region, latitude: location.latitude, longitude: location.longitude });
+    console.log(attractions);
   }
 
   return (
@@ -127,7 +129,7 @@ const OsmBoard = () => {
             pinColor="blue"
           />
 
-          {attractions.map((attraction: any) => (
+          {attractions.map((attraction: Attraction) => (
             <Marker
               key={attraction.id}
               coordinate={{
@@ -135,6 +137,8 @@ const OsmBoard = () => {
                 longitude: attraction.longitude,
               }}
               title={attraction.name}
+              description={attraction.description}
+              image={attraction.image_url as ImageURISource}
             />
           ))}
         </MapView>
