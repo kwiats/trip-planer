@@ -138,7 +138,8 @@ const OsmBoard = () => {
               }}
               title={attraction.name}
               description={attraction.description}
-              image={attraction.image_url as ImageURISource}
+              // image={(attraction.image_url as ImageURISource)
+              //   || 'https://media.cntraveler.com/photos/58de89946c3567139f9b6cca/16:9/w_1920,c_limit/GettyImages-468366251.jpg'}
             />
           ))}
         </MapView>

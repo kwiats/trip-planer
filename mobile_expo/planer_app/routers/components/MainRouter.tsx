@@ -13,9 +13,9 @@ import { AuthContext } from '../../contexts/AuthContext';
 import SubMenuDrawerContent from './DrawnerContent';
 import SearchAttractions from '../../components/views/Attractions/Search/Search';
 import AddNewAttraction from '../../components/views/Attractions/AddNew/AttractionForm';
-import AttractionDetailScreen from '../../components/views/common/AttractionDetail.tsx';
-import AddNewReview from '../../components/views/Attractions/Review/AddNew.tsx';
-import EditReview from '../../components/views/Attractions/Review/Edit.tsx';
+import AttractionDetailScreen from '../../components/views/common/AttractionDetail';
+import AddNewReview from '../../components/views/Attractions/Review/AddNew';
+import EditReview from '../../components/views/Attractions/Review/Edit';
 
 const MainRouter = () => {
   const { userToken } = useContext(AuthContext);

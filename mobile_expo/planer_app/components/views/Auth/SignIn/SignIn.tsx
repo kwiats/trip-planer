@@ -9,16 +9,22 @@ const SignIn = ({ navigation }: any) => {
   const { setUserToken } = useContext(AuthContext);
 
   const onLogin = async (username: string, password: string) => {
-    try {
-      const response = await makePostMessage({ username, password }, 'POST', 'login');
-      const newToken = response?.access_token;
-      if (newToken) {
-        await storeToken(newToken);
-        setUserToken(newToken);
+    // ToDo: remove before deploying to production
+    if (username === 'kwiatuh' && password === 'to_chuj') {
+      setUserToken('test_kwiatuh_token');
+    } else {
+    // end of remove
+      try {
+        const response = await makePostMessage({ username, password }, 'POST', 'login');
+        const newToken = response?.access_token;
+        if (newToken) {
+          await storeToken(newToken);
+          setUserToken(newToken);
+        }
+        navigation.navigate('Dashboard');
+      } catch (error) {
+        Alert.alert(`Login Error:${error}`);
       }
-      navigation.navigate('Dashboard');
-    } catch (error) {
-      Alert.alert(`Login Error:${error}`);
     }
   };
   return (

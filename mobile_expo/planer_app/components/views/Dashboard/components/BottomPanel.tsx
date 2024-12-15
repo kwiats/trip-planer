@@ -65,7 +65,9 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
                   place_name: attraction.name,
                   place_description: attraction.description,
                   place_category: attraction.category,
-                  place_rating: attraction.rating.toFixed(1)
+                  place_rating: attraction.rating.toFixed(1),
+                  image_url:
+                    'https://media.cntraveler.com/photos/58de89946c3567139f9b6cca/16:9/w_1920,c_limit/GettyImages-468366251.jpg'
                 }}
               />
             )

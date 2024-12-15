@@ -18,20 +18,20 @@ const AttractionSubMenu: React.FC<AttractionSubMenuProps> = (props) => {
   return (
     <>
       <DrawerItem
-        label="Attractions"
+        label="My Attractions"
         onPress={() => setNestedMenuToggle(!nestedMenuToggle)}
         focused={nestedMenuToggle}
       />
       <View style={{ marginLeft: 16, display: nestedMenuToggle ? 'flex' : 'none' }}>
         <DrawerItem
-          label="Search attraction"
+          label="Search"
           onPress={() => {
             navigation.navigate('Search');
             setNestedMenuToggle(false);
           }}
         />
         <DrawerItem
-          label="Add new attrsction"
+          label="Add new"
           onPress={() => {
             navigation.navigate('AddNew');
             setNestedMenuToggle(false);
