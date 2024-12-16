@@ -7,10 +7,12 @@ import { attractionsExamples } from '../Attractions/api/fake/apiMock';
 import EditSubMenuModal from './components/details/edit/EditSubMenu';
 import ReviewsModal from './components/details/review/ReviewsModal';
 
-const AttractionDetailScreen: React.FC<{
+type AttractionDetailsPops = {
   route: { params: { id: number } };
   navigation: NavigationProps;
-}> = ({ route, navigation }) => {
+}
+
+const AttractionDetailScreen: React.FC<AttractionDetailsPops> = ({ route, navigation }) => {
   const [attractionData, setAttractionData] = useState<Attraction>();
   const [attractionImages, setAttractionImages] = useState<any>();
   const [favorite, setFavorite] = useState<boolean>(false);
@@ -24,7 +26,7 @@ const AttractionDetailScreen: React.FC<{
       .then((attraction) => setAttractionData(attraction))
       .catch(() => {
         setAttractionData(attractionsExamples.find((attraction) => attraction.id === attractionId));
-        Alert.alert('Error', 'Failed getting attraction. Loading attraction demo data');
+        console.error('Error', 'Failed getting attraction. Loading attraction demo data');
       });
     //Add another fetches
     setAttractionImages(

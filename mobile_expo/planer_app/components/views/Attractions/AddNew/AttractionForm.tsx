@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-// import StarRating from 'react-native-star-rating';
+import StarRating from 'react-native-star-rating-widget';
 import { OpenHours } from '../types';
 import { OpeningHours } from './components/Hours';
 import { styles } from './styles';
@@ -60,13 +60,13 @@ const AddNewAttraction = () => {
         </View>
 
         <Text style={styles.label}>Attraction rate:</Text>
-        {/*<StarRating*/}
-        {/*  disabled={false}*/}
-        {/*  maxStars={5}*/}
-        {/*  rating={rating}*/}
-        {/*  selectedStar={(rating) => setRating(rating)}*/}
-        {/*  fullStarColor={'orange'}*/}
-        {/*/>*/}
+        <StarRating
+          maxStars={5}
+          starSize={30}
+          rating={rating}
+          onChange={(rating) => setRating(rating)}
+          color={'orange'}
+        />
       </ScrollView>
       <TouchableOpacity style={styles.buttonSubmit} onPress={onAddAttraction}>
         <Text style={styles.buttonText}>Add attraction</Text>

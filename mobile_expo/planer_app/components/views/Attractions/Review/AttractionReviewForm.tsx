@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { launchImageLibrary, MediaType } from 'react-native-image-picker';
-import { styles } from './styles.ts';
+import { styles } from './styles';
 
 interface Review {
   title: string;

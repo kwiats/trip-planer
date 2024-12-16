@@ -225,7 +225,7 @@ export const reviewsExamples: Opinion[] = [
       'https://domyinterstyl.pl/wp-content/uploads/2023/09/Projekt-bez-nazwy-13.jpg'
     ],
     rating: 4,
-    title: 'Awesome Experience',
+    title: 'images',
     price: 3,
     time_spent: 2,
   },

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReviewForm from './AttractionReviewForm.tsx';
+import ReviewForm from './AttractionReviewForm';
 
 const EditReview: React.FC<{ route: any }> = ({ route }) => {
   const { review } = route.params;

@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import Dashboard from '../../components/views/Dashboard/Dashboard';
 import Register from '../../components/views/Auth/Register/Register';
 import SignIn from '../../components/views/Auth/SignIn/SignIn';
-import UserDashbard from '../../components/views/User/UserDashboard';
+import UserDashboard from '../../components/views/User/UserDashboard';
 import ChangePassword from '../../components/views/User/ChangePassword';
 import ChangeEmail from '../../components/views/User/ChangeEmail';
 import DeleteAccount from '../../components/views/User/DeleteUser';
@@ -39,7 +39,7 @@ const MainRouter = () => {
         />
         {!userToken && <Drawer.Screen name="Register" component={Register} />}
         {!userToken && <Drawer.Screen name="Sign In" component={SignIn} />}
-        {userToken && <Drawer.Screen name="My Account" component={UserDashbard} />}
+        {userToken && <Drawer.Screen name="My Account" component={UserDashboard} />}
         <Drawer.Screen
           name="AttractionDetailScreen"
           component={AttractionDetailScreen}

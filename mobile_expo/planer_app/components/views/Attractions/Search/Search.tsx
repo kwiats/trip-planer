@@ -32,7 +32,7 @@ const AttractionSearchScreen: React.FC<{ navigation: NavigationProps }> = ({ nav
       .then((fetchAttractions) => setUserAttractions(fetchAttractions))
       .catch(() => {
         if (userAttractions === attractionsExamples) {
-          Alert.alert('Error', 'Failed getting user attractions. Loading demo data');
+          console.error('Error', 'Failed getting user attractions. Loading demo data');
         } else {
           Alert.alert('Error', 'Failed getting user attractions.');
         }
@@ -134,6 +134,8 @@ const AttractionSearchScreen: React.FC<{ navigation: NavigationProps }> = ({ nav
                         place_description: attraction.description,
                         place_category: attraction.category,
                         place_rating: attraction.rating.toFixed(1),
+                        image_url:
+                          'https://media.cntraveler.com/photos/58de89946c3567139f9b6cca/16:9/w_1920,c_limit/GettyImages-468366251.jpg'
                       }}
                     />
                   </View>

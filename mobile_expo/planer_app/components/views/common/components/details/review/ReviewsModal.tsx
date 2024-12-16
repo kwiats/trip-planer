@@ -43,7 +43,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
       .then((opinion) => setAttractionOpinions(opinion))
       .catch(() => {
         setAttractionOpinions(reviewsExamples);
-        Alert.alert('Error', 'Failed getting reviews. Loading reviews demo data');
+        console.error('Error', 'Failed getting reviews. Loading reviews demo data');
       });
   }, [attractionId]);
 
