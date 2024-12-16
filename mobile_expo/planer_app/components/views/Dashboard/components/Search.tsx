@@ -15,7 +15,7 @@ const Search = ({ setLocation, setAttractions, setSearchText, searchText }: any)
          if (attractions && attractions.length > 0) setAttractions(attractions); else console.log('Attraction demo data');
       })
       .catch((error) => {
-        Alert.alert('Error', 'Failed to find location');
+        // Alert.alert('Error', 'Failed to find location');
         console.error(error);
       });
     Keyboard.dismiss();

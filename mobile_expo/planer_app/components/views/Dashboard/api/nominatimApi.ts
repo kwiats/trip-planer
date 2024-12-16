@@ -10,7 +10,7 @@ export const fetchLocationFromNominatim = (searchText: string): Promise<Coordina
 
   return fetch(url, {
     headers: {
-      'User-Agent': 'YourAppName/1.0',
+      'User-Agent': 'PlanerApp/1.0',
     },
   })
     .then((response) => {
