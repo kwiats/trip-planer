@@ -1,6 +1,9 @@
 name: Python App Quality
 
 on:
+    push:
+        paths:
+          - 'backend/**'
     pull_request:
       branches:  
         - dev
