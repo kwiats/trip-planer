@@ -4,7 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { styles } from '../styles';
 import AttractionTile from '../../common/AttractionTile';
-import { Attraction } from "../../Attractions/types";
+import { Attraction } from "../../Attraction/types";
 
 
 interface BottomPanelProps {

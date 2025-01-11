@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, Text, View } from 'react-native';
 import { attractionTileStyles } from './styles';
-import { Attraction, Opinion } from '../../../../Attractions/types';
+import { Attraction, Opinion } from '../../../../Attraction/types';
 
 interface AttractionReviewTileProps {
   attraction: Attraction;

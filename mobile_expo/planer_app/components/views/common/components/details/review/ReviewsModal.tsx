@@ -4,9 +4,9 @@ import { reviewModal } from './styles';
 import {
   fetchAttraction,
   fetchAttractionOpinions,
-} from '../../../../Attractions/api/attractionsApi';
-import { Attraction, Opinion } from '../../../../Attractions/types';
-import { attractionsExamples, reviewsExamples } from '../../../../Attractions/api/fake/apiMock';
+} from '../../../../Attraction/api/attractionsApi';
+import { Attraction, Opinion } from '../../../../Attraction/types';
+import { attractionsExamples, reviewsExamples } from '../../../../Attraction/api/fake/apiMock';
 import ReviewTile from './ReviewTile';
 import AttractionReviewTile from './AtrractionReviewTile';
 import SortTile from './SortTile';

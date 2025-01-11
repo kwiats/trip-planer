@@ -6,8 +6,8 @@ import { styles } from '../styles';
 import Search from './Search';
 import BottomPanel from './BottomPanel';
 import { fetchAttractions } from '../api/attractionsApi';
-import { attractionsExamples } from '../../Attractions/api/fake/apiMock'
-import { Attraction } from "../../Attractions/types";
+import { attractionsExamples } from '../../Attraction/api/fake/apiMock'
+import { Attraction } from "../../Attraction/types";
 
 const OsmBoard = () => {
   const [location, setLocation] = useState<boolean>(false);
