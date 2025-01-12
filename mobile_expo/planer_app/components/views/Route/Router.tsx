@@ -3,15 +3,15 @@ import { DrawerItem, DrawerNavigationProp } from '@react-navigation/drawer';
 import { View } from 'react-native';
 
 type DrawerParamList = {
-  Search: any;
-  AddNew: any;
+  ShowRoutes: any;
+  CreateRoute: any;
 };
 
-type AttractionSubMenuProps = {
+type RouteSubMenuProps = {
   navigation: DrawerNavigationProp<DrawerParamList>;
 };
 
-const RouteSubMenu: React.FC<AttractionSubMenuProps> = (props) => {
+const RouteSubMenu: React.FC<RouteSubMenuProps> = (props) => {
   const [nestedMenuToggle, setNestedMenuToggle] = useState(false);
   const navigation = props.navigation;
 

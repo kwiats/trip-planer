@@ -16,6 +16,8 @@ import AddNewAttraction from '../../components/views/Attraction/AddNew/Attractio
 import AttractionDetailScreen from '../../components/views/common/AttractionDetail';
 import AddNewReview from '../../components/views/Attraction/Review/AddNew';
 import EditReview from '../../components/views/Attraction/Review/Edit';
+import CreateRoute from "../../components/views/Route/AddNew/CreateRoute";
+import RoutesList from "../../components/views/Route/RoutesList/RoutesList";
 
 const MainRouter = () => {
   const { userToken } = useContext(AuthContext);
@@ -39,12 +41,12 @@ const MainRouter = () => {
         />
         <Drawer.Screen
           name="ShowRoutes"
-          component={Dashboard}
+          component={RoutesList}
           options={{ drawerItemStyle: { display: 'none' } }}
         />
         <Drawer.Screen
           name="CreateRoute"
-          component={Dashboard}
+          component={CreateRoute}
           options={{ drawerItemStyle: { display: 'none' } }}
         />
         {!userToken && <Drawer.Screen name="Register" component={Register} />}

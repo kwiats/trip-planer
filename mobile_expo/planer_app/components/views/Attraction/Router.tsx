@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { DrawerItem, DrawerNavigationProp } from '@react-navigation/drawer';
 import { View } from 'react-native';
 
-type DrawerParamList = {
-  Search: any;
-  AddNew: any;
+type DrawerSubList = {
+  SearchAttraction: any;
+  AddNewAttraction: any;
 };
 
 type AttractionSubMenuProps = {
-  navigation: DrawerNavigationProp<DrawerParamList>;
+  navigation: DrawerNavigationProp<DrawerSubList>;
 };
 
 const AttractionSubMenu: React.FC<AttractionSubMenuProps> = (props) => {
