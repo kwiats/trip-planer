@@ -1,0 +1,10 @@
+#project
+.vscode
+.github
+.idea
+
+#frontend
+mobile
+
+#backend
+backend/.venv
