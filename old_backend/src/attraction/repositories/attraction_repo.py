@@ -78,6 +78,7 @@ class AttractionRepository(Repository):
                     longitude=attraction.longitude,
                     latitude=attraction.latitude,
                     open_hours=attraction.open_hours,
+                    user_id=attraction.user_id,
                 )
                 db.add(new_attraction)
             return True
