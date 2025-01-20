@@ -69,4 +69,71 @@ export const styles = StyleSheet.create({
   spacer: {
     height: 10,
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  calloutContainer: {
+    padding: 10,
+    backgroundColor: '#FFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
+    minWidth: 150,
+    minHeight: 50
+  },
+  calloutView: {
+    width: 160,
+    height: 40,
+  },
+  calloutImage: {
+    width: '100%',
+    height: 100,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  calloutTextContainer: {
+    flex: 1,
+  },
+  calloutText: {
+    color: '#085760',
+    fontSize: 16,
+  },
+  calloutTitle: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  calloutDescription: {
+    fontSize: 14,
+    color: 'gray',
+    marginBottom: 10,
+  },
+  calloutButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  calloutButton: {
+    backgroundColor: '#007bff',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
+  calloutButtonText: {
+    color: 'white',
+    fontSize: 12,
+  },
 });
