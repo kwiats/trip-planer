@@ -5,13 +5,13 @@ import MapboxBoard from './components/MapBoard';
 import RoutesList from "../Route/RoutesList/RoutesList";
 
 const Dashboard = () => {
-  const [routesListVisible, setRoutesListVisible] = useState<boolean>(false);
+  // const [routesListVisible, setRoutesListVisible] = useState<boolean>(true);
   return (
     <>
-      <RoutesList short={true} isOpen={routesListVisible}/>
+    {/*{routesListVisible && <RoutesList short={true} isOpen={true}/>}*/}
       <View style={styles.page}>
         <MapboxBoard
-          onAddToRoadClick={() => setRoutesListVisible(true)}
+          onAddToRoadClick={() => null } //setRoutesListVisible(true)}
         />
       </View>
     </>

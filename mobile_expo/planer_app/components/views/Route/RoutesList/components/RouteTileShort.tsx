@@ -47,50 +47,56 @@ export const RouteTileShort: React.FC<RouteListProps> = ({ routes, setRoutes, is
   };
 
   return (
-    <Modal
-      animationType="slide"
-      transparent
-      visible={isModalVisible}
-      onRequestClose={() => setModalVisible(false)}
-    >
-      <TouchableWithoutFeedback
-        onPress={() => {
+    <View style={styles.contentContainer}>
+      <Modal
+        animationType="none"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => {
           setModalVisible(false);
-          Keyboard.dismiss();
+          onClose(-1);
         }}
+        style={{ flex: 1 }}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Routes</Text>
-            <FlatList
-              data={routes}
-              renderItem={({ item }) => (
-                <View style={styles.listItem}>
-                  <TouchableOpacity onPress={() => {
-                    setModalVisible(false);
-                    onClose(item.id);
-                  }}>
-                    <Text style={styles.listItemText}>{item.name}</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-              keyExtractor={(item) => item.id.toString()}
-            />
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="New route"
-                value={newRouteName}
-                onChangeText={setNewRouteName}
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setModalVisible(false);
+            Keyboard.dismiss();
+            onClose(-1);
+          }}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalTitle}>Routes</Text>
+              <FlatList
+                data={routes}
+                renderItem={({ item }) => (
+                  <View style={styles.listItem}>
+                    <TouchableOpacity onPress={() => {
+                      setModalVisible(false);
+                      onClose(item.id);
+                    }}>
+                      <Text style={styles.listItemText}>{item.name}</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+                keyExtractor={(item) => item.id.toString()}
               />
-              <TouchableOpacity style={styles.addButton} onPress={addRoute}>
-                <Text style={styles.addButtonText}>Add New</Text>
-              </TouchableOpacity>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="New route"
+                  value={newRouteName}
+                  onChangeText={setNewRouteName}
+                />
+                <TouchableOpacity style={styles.addButton} onPress={addRoute}>
+                  <Text style={styles.addButtonText}>Add New</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
-    </Modal>
-
+        </TouchableWithoutFeedback>
+      </Modal>
+    </View>
   );
 };

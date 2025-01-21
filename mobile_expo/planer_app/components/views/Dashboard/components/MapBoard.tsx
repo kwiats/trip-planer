@@ -14,7 +14,7 @@ interface MapBoardProps {
   onAddToRoadClick: () => void;
 }
 
-const OsmBoard: React.FC<MapBoardProps> = ({onAddToRoadClick}) => {
+const OsmBoard: React.FC<MapBoardProps> = ({ onAddToRoadClick }) => {
   const [location, setLocation] = useState<boolean>(false);
   const [region, setRegion] = useState({
     latitude: 52.2296756,
@@ -27,6 +27,8 @@ const OsmBoard: React.FC<MapBoardProps> = ({onAddToRoadClick}) => {
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedAttraction, setSelectedAttraction] = useState<Attraction | undefined>(undefined);
+  const [routesListVisible, setRoutesListVisible] = useState<boolean>(false);
+
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -119,68 +121,72 @@ const OsmBoard: React.FC<MapBoardProps> = ({onAddToRoadClick}) => {
   }, [selectedAttraction]);
 
   return (
-      <View
-        style={styles.container}
-      >
-        <Search
-          setLocation={setNewRegion}
-          fetchAttractions={fetchAttractions}
-          setSearchText={setSearchText}
-          searchText={searchText}
-        />
-        {location && (
-          <MapView
-            style={styles.map}
-            region={region}
-            provider={PROVIDER_DEFAULT}
-            moveOnMarkerPress={false}
-          >
-            <UrlTile
-              urlTemplate="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              maximumZ={25}
-            />
+    <View
+      style={styles.container}
+    >
+      <Search
+        setLocation={setNewRegion}
+        fetchAttractions={fetchAttractions}
+        setSearchText={setSearchText}
+        searchText={searchText}
+      />
+      {location && (
+        <MapView
+          style={styles.map}
+          region={region}
+          provider={PROVIDER_DEFAULT}
+          moveOnMarkerPress={false}
+        >
+          <UrlTile
+            urlTemplate="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            maximumZ={25}
+          />
 
+          <Marker
+            coordinate={{ latitude: region.latitude, longitude: region.longitude }}
+            title="Your localization"
+            pinColor="blue"
+          />
+
+          {attractions.map((attraction: Attraction) => (
             <Marker
-              coordinate={{ latitude: region.latitude, longitude: region.longitude }}
-              title="Your localization"
-              pinColor="blue"
-            />
-
-            {attractions.map((attraction: Attraction) => (
-              <Marker
-                key={attraction.id}
-                coordinate={{
-                  latitude: attraction.latitude,
-                  longitude: attraction.longitude,
-                }}
-                title={attraction.name}
-                description={attraction.description}
-                tracksInfoWindowChanges={true}
-                onSelect={() => setSelectedAttraction(attraction)}
-                onDeselect={() => setSelectedAttraction(undefined)}
-                ref={(ref) => {
-                  markersRef.current[attraction.id] = ref;
-                }}
-              >
-              </Marker>
-            ))}
-          </MapView>
-        )}
-        <View style={styles.zoomControls}>
-          <Button title="+" onPress={zoomIn}/>
-          <View style={styles.spacer}/>
-          <Button title="-" onPress={zoomOut}/>
-        </View>
-        <BottomPanel
-          isVisible={panelVisible}
-          searchText={searchText}
-          selectedCategory={selectedCategory}
-          onCategoryChange={onCategoryChange}
-          attractions={attractions}
-          headAttractionState={{ headAttraction: selectedAttraction, setHeadAttraction: setSelectedAttraction }}
-          onAddToRoute={() => onAddToRoadClick()}
-        />
+              key={attraction.id}
+              coordinate={{
+                latitude: attraction.latitude,
+                longitude: attraction.longitude,
+              }}
+              title={attraction.name}
+              description={attraction.description}
+              tracksInfoWindowChanges={true}
+              onSelect={() => setSelectedAttraction(attraction)}
+              onDeselect={() => setSelectedAttraction(undefined)}
+              ref={(ref) => {
+                markersRef.current[attraction.id] = ref;
+              }}
+            >
+            </Marker>
+          ))}
+        </MapView>
+      )}
+      <RoutesList short={true} isOpen={routesListVisible} onClose={() => setRoutesListVisible(!routesListVisible)}/>
+      <View style={styles.zoomControls}>
+        <Button title="+" onPress={zoomIn}/>
+        <View style={styles.spacer}/>
+        <Button title="-" onPress={zoomOut}/>
       </View>
+      <BottomPanel
+        isVisible={panelVisible}
+        searchText={searchText}
+        selectedCategory={selectedCategory}
+        onCategoryChange={onCategoryChange}
+        attractions={attractions}
+        headAttractionState={{ headAttraction: selectedAttraction, setHeadAttraction: setSelectedAttraction }}
+        onAddToRoute={() => {
+          setRoutesListVisible(!routesListVisible);
+          console.log('show modal');
+        }} //onAddToRoadClick()}
+      />
+    </View>
   );
 };
 

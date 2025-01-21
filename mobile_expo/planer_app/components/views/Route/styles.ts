@@ -19,6 +19,12 @@ export const routesListShort = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  contentContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+  },
   modalContainer: {
     width: '80%',
     backgroundColor: '#fff',

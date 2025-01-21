@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Modal, Text, TextInput, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { Attraction } from '../../types.ts';
-import { filterModal } from '../styles.ts';
+import { Attraction } from '../../types';
+import { filterModal } from '../styles';
 
 interface FiltersModalProps {
   visible: boolean;

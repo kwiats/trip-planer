@@ -117,7 +117,7 @@ const AttractionDetailScreen: React.FC<AttractionDetailsPops> = ({ route, naviga
           <Text style={attractionDetails.favoriteText}>{favorite ? '❤️' : '♡'}</Text>
         </TouchableOpacity>
       </View>
-      {routesListVisible && <RoutesList short={true} isOpen={true}/>}
+      <RoutesList short={true} isOpen={routesListVisible} onClose={() => setRoutesListVisible(!routesListVisible)}/>
     </>
   ) : (
     <Text> Loading or something else</Text>
