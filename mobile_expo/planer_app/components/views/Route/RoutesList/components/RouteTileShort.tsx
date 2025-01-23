@@ -21,7 +21,7 @@ interface RouteListProps {
 
 export const RouteTileShort: React.FC<RouteListProps> = ({ routes, setRoutes, isOpen, onClose }) => {
 
-  const [newRouteName, setNewRouteName] = useState('');
+  const [newRouteName, setNewRouteName] = useState<string>('');
   const [isModalVisible, setModalVisible] = useState<boolean>(isOpen);
 
   useEffect(() => {
@@ -61,6 +61,7 @@ export const RouteTileShort: React.FC<RouteListProps> = ({ routes, setRoutes, is
         <TouchableWithoutFeedback
           onPress={() => {
             setModalVisible(false);
+            setNewRouteName('');
             Keyboard.dismiss();
             onClose(-1);
           }}
@@ -70,6 +71,7 @@ export const RouteTileShort: React.FC<RouteListProps> = ({ routes, setRoutes, is
               <Text style={styles.modalTitle}>Routes</Text>
               <FlatList
                 data={routes}
+                style={{width: '100%'}}
                 renderItem={({ item }) => (
                   <View style={styles.listItem}>
                     <TouchableOpacity onPress={() => {

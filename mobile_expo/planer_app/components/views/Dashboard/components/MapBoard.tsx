@@ -10,11 +10,7 @@ import { attractionsExamples } from '../../Attraction/api/fake/apiMock'
 import { Attraction } from "../../Attraction/types";
 import RoutesList from "../../Route/RoutesList/RoutesList";
 
-interface MapBoardProps {
-  onAddToRoadClick: () => void;
-}
-
-const OsmBoard: React.FC<MapBoardProps> = ({ onAddToRoadClick }) => {
+const OsmBoard: React.FC = () => {
   const [location, setLocation] = useState<boolean>(false);
   const [region, setRegion] = useState({
     latitude: 52.2296756,
@@ -184,7 +180,7 @@ const OsmBoard: React.FC<MapBoardProps> = ({ onAddToRoadClick }) => {
         onAddToRoute={() => {
           setRoutesListVisible(!routesListVisible);
           console.log('show modal');
-        }} //onAddToRoadClick()}
+        }}
       />
     </View>
   );
