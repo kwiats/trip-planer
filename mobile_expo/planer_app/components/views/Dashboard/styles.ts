@@ -76,19 +76,18 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    marginLeft: 8,
+    flex: 1,
+    marginHorizontal: 4,
     paddingVertical: 10,
-    paddingHorizontal: 16,
     borderRadius: 8,
-    borderColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 13
+    backgroundColor: "#2196F3",
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonText: {
-    color: '000',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "600",
   },
   calloutContainer: {
     padding: 10,

@@ -5,4 +5,5 @@ export type Route = {
   name: string;
   description: string;
   attractions: Attraction[];
+  status: string;
 }

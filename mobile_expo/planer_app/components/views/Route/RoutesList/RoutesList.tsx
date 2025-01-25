@@ -21,7 +21,13 @@ const RoutesList: React.FC<routesListProps> = ({ short, isOpen, onClose }) => {
   return (
     <>
       {!short &&
-          <RouteTileFull routes={userRoutes}/>
+          <RouteTileFull
+              routes={userRoutes}
+              setRoutes={setUserRoutes}
+              onShowOnMap={() => console.log('Show on map')}
+              onShowDetails={() => console.log('Route details')}
+              onDeleteRoute={() => console.log('Delete route')}
+          />
       }
       {short &&
           <RouteTileShort routes={userRoutes} setRoutes={setUserRoutes} isOpen={isOpen} onClose={onModalClose}/>

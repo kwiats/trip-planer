@@ -10,19 +10,18 @@ import {
   TouchableWithoutFeedback,
   View
 } from "react-native";
-import { routesListShort as styles } from "../../styles";
+import { routesList as styles } from "../../styles";
 
-interface RouteListProps {
+interface routeListProps {
   routes: Route[];
   setRoutes: React.Dispatch<React.SetStateAction<Route[]>>;
   isOpen: boolean;
   onClose: (id: number) => void;
 }
 
-export const RouteTileShort: React.FC<RouteListProps> = ({ routes, setRoutes, isOpen, onClose }) => {
-
-  const [newRouteName, setNewRouteName] = useState<string>('');
-  const [isModalVisible, setModalVisible] = useState<boolean>(isOpen);
+export const RouteTileShort: React.FC<(routeListProps)> = ({ routes, setRoutes, isOpen, onClose }) => {
+  const [newRouteName, setNewRouteName] = useState("");
+  const [isModalVisible, setModalVisible] = useState(isOpen);
 
   useEffect(() => {
     setModalVisible(isOpen);
@@ -34,13 +33,14 @@ export const RouteTileShort: React.FC<RouteListProps> = ({ routes, setRoutes, is
       setRoutes((prevRoutes) => [
         ...prevRoutes,
         {
-          id: id,
+          id,
           name: newRouteName,
-          description: '',
+          description: "",
           attractions: [],
+          status: "new",
         },
       ]);
-      setNewRouteName('');
+      setNewRouteName("");
       setModalVisible(false);
       onClose(id);
     }
@@ -49,35 +49,36 @@ export const RouteTileShort: React.FC<RouteListProps> = ({ routes, setRoutes, is
   return (
     <View style={styles.contentContainer}>
       <Modal
-        animationType="none"
+        animationType="fade"
         transparent={true}
         visible={isModalVisible}
         onRequestClose={() => {
           setModalVisible(false);
           onClose(-1);
         }}
-        style={{ flex: 1 }}
       >
         <TouchableWithoutFeedback
           onPress={() => {
             setModalVisible(false);
-            setNewRouteName('');
+            setNewRouteName("");
             Keyboard.dismiss();
             onClose(-1);
           }}
         >
           <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>Routes</Text>
+            <View style={styles.container}>
+              <Text style={styles.title}>Routes</Text>
               <FlatList
                 data={routes}
-                style={{width: '100%'}}
+                style={{ width: "100%" }}
                 renderItem={({ item }) => (
                   <View style={styles.listItem}>
-                    <TouchableOpacity onPress={() => {
-                      setModalVisible(false);
-                      onClose(item.id);
-                    }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setModalVisible(false);
+                        onClose(item.id);
+                      }}
+                    >
                       <Text style={styles.listItemText}>{item.name}</Text>
                     </TouchableOpacity>
                   </View>
@@ -92,7 +93,7 @@ export const RouteTileShort: React.FC<RouteListProps> = ({ routes, setRoutes, is
                   onChangeText={setNewRouteName}
                 />
                 <TouchableOpacity style={styles.addButton} onPress={addRoute}>
-                  <Text style={styles.addButtonText}>Add New</Text>
+                  <Text style={styles.addButtonText}>Add</Text>
                 </TouchableOpacity>
               </View>
             </View>

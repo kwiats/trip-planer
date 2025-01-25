@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useMemo, useRef, useState } from 'react';
+import React, { Dispatch, useEffect, useMemo, useRef } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
@@ -6,7 +6,6 @@ import { styles } from '../styles';
 import AttractionTile from '../../common/AttractionTile';
 import { Attraction, NavigationProps } from "../../Attraction/types";
 import { useNavigation } from "@react-navigation/native";
-import RoutesList from "../../Route/RoutesList/RoutesList";
 
 
 interface BottomPanelProps {
@@ -63,72 +62,72 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
   }, [headAttraction]);
 
   return (
-      <BottomSheet ref={sheetRef} index={isVisible ? 1 : 0} snapPoints={snapPoints}>
-        {headAttraction &&
-            <View>
-                <AttractionTile
-                    key={headAttraction.id}
-                    attraction={{
-                      place_name: headAttraction.name,
-                      place_description: headAttraction.description,
-                      place_category: headAttraction.category,
-                      place_rating: headAttraction.rating.toFixed(1),
-                      image_url:
-                        'https://media.cntraveler.com/photos/58de89946c3567139f9b6cca/16:9/w_1920,c_limit/GettyImages-468366251.jpg'
-                    }}/>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={() => onAddToRoute()}>
-                        <Text style={styles.buttonText}>Add to Route</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}
-                                      onPress={() => navigation.navigate('AttractionDetailScreen', { id: headAttraction?.id })}>
-                        <Text style={styles.buttonText}>More Details</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        }
-        <View style={{ padding: 10 }}>
-          <View style={styles.searchSection}>
-            <Text>{searchText}</Text>
+    <BottomSheet ref={sheetRef} index={isVisible ? 1 : 0} snapPoints={snapPoints}>
+      {headAttraction &&
+          <View>
+              <AttractionTile
+                  attraction={{
+                    place_name: headAttraction.name,
+                    place_description: headAttraction.description,
+                    place_category: headAttraction.category,
+                    place_rating: headAttraction.rating.toFixed(1),
+                    image_url:
+                      'https://media.cntraveler.com/photos/58de89946c3567139f9b6cca/16:9/w_1920,c_limit/GettyImages-468366251.jpg'
+                  }}/>
+              <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.button} onPress={() => onAddToRoute()}>
+                      <Text style={styles.buttonText}>Add to Route</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.button}
+                                    onPress={() => navigation.navigate('AttractionDetailScreen', { id: headAttraction?.id })}>
+                      <Text style={styles.buttonText}>More Details</Text>
+                  </TouchableOpacity>
+              </View>
+          </View>
+      }
+      <View style={{ padding: 10 }}>
+        <View style={styles.searchSection}>
+          <Text>{searchText}</Text>
 
-            <Picker
-              style={styles.picker}
-              selectedValue={selectedCategory}
-              onValueChange={(itemValue) => onCategoryChange(itemValue)}>
-              <Picker.Item label="Culture" value="culture"/>
-              <Picker.Item label="Food" value="gastronomy"/>
-            </Picker>
-          </View>
+          <Picker
+            style={styles.picker}
+            selectedValue={selectedCategory}
+            onValueChange={(itemValue) => onCategoryChange(itemValue)}>
+            <Picker.Item label="Culture" value="culture"/>
+            <Picker.Item label="Food" value="gastronomy"/>
+          </Picker>
         </View>
-        <BottomSheetScrollView>
-          <View style={styles.attractionsGrid}>
-            {(attractions && attractions.length > 0 ?
-                attractions.filter((a) => (a != headAttraction)).map(
-                  (attraction: Attraction) => (
-                    <TouchableOpacity onPress={() => {
-                      headAttractionState.setHeadAttraction(attraction);
-                    }}>
-                      <AttractionTile
-                        key={attraction.id}
-                        attraction={{
-                          place_name: attraction.name,
-                          place_description: attraction.description,
-                          place_category: attraction.category,
-                          place_rating: attraction.rating.toFixed(1),
-                          image_url:
-                            'https://media.cntraveler.com/photos/58de89946c3567139f9b6cca/16:9/w_1920,c_limit/GettyImages-468366251.jpg'
-                        }}
-                      />
-                    </TouchableOpacity>
-                  )
-                ) : placeholderAttractions.map(
-                  (attraction, index) => (
-                    <AttractionTile key={index} attraction={attraction}/>
-                  ))
-            )}
-          </View>
-        </BottomSheetScrollView>
-      </BottomSheet>
+      </View>
+      <BottomSheetScrollView>
+        <View style={styles.attractionsGrid}>
+          {(attractions && attractions.length > 0 ?
+              attractions.filter((a) => (a != headAttraction)).map(
+                (attraction: Attraction) => (
+                  <TouchableOpacity
+                    key={attraction.id}
+                    onPress={() => {
+                    headAttractionState.setHeadAttraction(attraction);
+                  }}>
+                    <AttractionTile
+                      attraction={{
+                        place_name: attraction.name,
+                        place_description: attraction.description,
+                        place_category: attraction.category,
+                        place_rating: attraction.rating.toFixed(1),
+                        image_url:
+                          'https://media.cntraveler.com/photos/58de89946c3567139f9b6cca/16:9/w_1920,c_limit/GettyImages-468366251.jpg'
+                      }}
+                    />
+                  </TouchableOpacity>
+                )
+              ) : placeholderAttractions.map(
+                (attraction, index) => (
+                  <AttractionTile key={index} attraction={attraction}/>
+                ))
+          )}
+        </View>
+      </BottomSheetScrollView>
+    </BottomSheet>
   )
     ;
 };

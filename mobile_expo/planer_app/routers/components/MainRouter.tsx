@@ -16,7 +16,6 @@ import AddNewAttraction from '../../components/views/Attraction/AddNew/Attractio
 import AttractionDetailScreen from '../../components/views/common/AttractionDetail';
 import AddNewReview from '../../components/views/Attraction/Review/AddNew';
 import EditReview from '../../components/views/Attraction/Review/Edit';
-import CreateRoute from "../../components/views/Route/AddNew/CreateRoute";
 import RoutesList from "../../components/views/Route/RoutesList/RoutesList";
 
 const MainRouter = () => {
@@ -39,19 +38,10 @@ const MainRouter = () => {
           component={AddNewAttraction}
           options={{ drawerItemStyle: { display: 'none' } }}
         />
-        <Drawer.Screen
-          name="ShowRoutes"
-          component={RoutesList}
-          options={{ drawerItemStyle: { display: 'none' } }}
-        />
-        <Drawer.Screen
-          name="CreateRoute"
-          component={CreateRoute}
-          options={{ drawerItemStyle: { display: 'none' } }}
-        />
         {!userToken && <Drawer.Screen name="Register" component={Register} />}
         {!userToken && <Drawer.Screen name="Sign In" component={SignIn} />}
         {userToken && <Drawer.Screen name="My Account" component={UserDashboard} />}
+        {userToken && <Drawer.Screen name={"My Routes"} component={RoutesList} />}
         <Drawer.Screen
           name="AttractionDetailScreen"
           component={AttractionDetailScreen}
