@@ -16,7 +16,7 @@ interface routeListProps {
   routes: Route[];
   setRoutes: React.Dispatch<React.SetStateAction<Route[]>>;
   onShowOnMap: () => void;
-  onShowDetails: () => void;
+  onShowDetails: (route: Route) => void;
   onDeleteRoute: () => void;
 }
 
@@ -101,17 +101,17 @@ export const RouteTileFull: React.FC<(routeListProps)> = ({
 
               {isSelected && (
                 <View style={styles.buttonGroup}>
-                  <TouchableOpacity
+                  {route.status != 'new' && <TouchableOpacity
                     style={styles.actionButton}
                     onPress={() => onShowOnMap()}
                   >
                     <Text style={styles.actionButtonText}>Show on Map</Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity>}
                   <TouchableOpacity
                     style={styles.actionButton}
-                    onPress={() => onShowDetails()}
+                    onPress={() => onShowDetails(route)}
                   >
-                    <Text style={styles.actionButtonText}>Details</Text>
+                    <Text style={styles.actionButtonText}>{route.status ==='new' ? 'Create' : 'Details'}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.actionButton}

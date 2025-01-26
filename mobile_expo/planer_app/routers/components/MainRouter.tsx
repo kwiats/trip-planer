@@ -17,10 +17,12 @@ import AttractionDetailScreen from '../../components/views/common/AttractionDeta
 import AddNewReview from '../../components/views/Attraction/Review/AddNew';
 import EditReview from '../../components/views/Attraction/Review/Edit';
 import RoutesList from "../../components/views/Route/RoutesList/RoutesList";
+import RouteDetails from "../../components/views/Route/RouteDetailsEdit/RouteDetailsEdit";
+import { DrawerParamList } from "../DrawerParamList";
 
 const MainRouter = () => {
   const { userToken } = useContext(AuthContext);
-  const Drawer = createDrawerNavigator();
+  const Drawer = createDrawerNavigator<DrawerParamList>();
   console.log(userToken);
   return (
     <NavigationContainer>
@@ -41,7 +43,7 @@ const MainRouter = () => {
         {!userToken && <Drawer.Screen name="Register" component={Register} />}
         {!userToken && <Drawer.Screen name="Sign In" component={SignIn} />}
         {userToken && <Drawer.Screen name="My Account" component={UserDashboard} />}
-        {userToken && <Drawer.Screen name={"My Routes"} component={RoutesList} />}
+        {userToken && <Drawer.Screen name="My Routes" component={RoutesList} />}
         <Drawer.Screen
           name="AttractionDetailScreen"
           component={AttractionDetailScreen}
@@ -75,6 +77,11 @@ const MainRouter = () => {
         <Drawer.Screen
           name="Change Profil Informations"
           component={ProfileChangeDisplay}
+          options={{ drawerItemStyle: { display: 'none' } }}
+        />
+        <Drawer.Screen
+          name={"Route Details"}
+          component={RouteDetails}
           options={{ drawerItemStyle: { display: 'none' } }}
         />
       </Drawer.Navigator>
