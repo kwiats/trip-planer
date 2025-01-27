@@ -3,13 +3,13 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { Attraction } from "../../../Attraction/types";
 import { attractionTileStyles as styles } from "../../styles";
 
-interface attractionTileProps {
+interface AttractionTileProps {
   attraction: Attraction;
   editeMode: boolean;
   onRemove?: () => void;
 }
 
-const AttractionTile: React.FC<attractionTileProps> = ({ attraction, editeMode, onRemove }) => {
+const AttractionTile: React.FC<AttractionTileProps> = ({ attraction, editeMode, onRemove }) => {
   const hasImage = attraction.image_url && attraction.image_url.trim() !== '';
 
   return (

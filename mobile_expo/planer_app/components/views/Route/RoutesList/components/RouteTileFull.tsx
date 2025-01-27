@@ -13,15 +13,15 @@ import {
 import { routesList as styles } from "../../styles";
 import { getStatusIcon } from "../../../../utils/statusIcon";
 
-interface routeListProps {
+interface RouteListProps {
   routes: Route[];
   setRoutes: React.Dispatch<React.SetStateAction<Route[]>>;
   onShowOnMap: () => void;
   onShowDetails: (route: Route) => void;
-  onDeleteRoute: () => void;
+  onDeleteRoute: (route: Route) => void;
 }
 
-export const RouteTileFull: React.FC<(routeListProps)> = ({
+export const RouteTileFull: React.FC<(RouteListProps)> = ({
                                                             routes,
                                                             setRoutes,
                                                             onShowOnMap,
@@ -106,7 +106,7 @@ export const RouteTileFull: React.FC<(routeListProps)> = ({
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.actionButton}
-                    onPress={() => onDeleteRoute()}
+                    onPress={() => onDeleteRoute(route)}
                   >
                     <Text style={styles.actionButtonText}>Delete</Text>
                   </TouchableOpacity>

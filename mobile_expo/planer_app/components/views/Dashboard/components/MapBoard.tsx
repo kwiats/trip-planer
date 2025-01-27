@@ -19,6 +19,7 @@ const OsmBoard: React.FC = () => {
     longitudeDelta: 0.05,
   });
   const [attractions, setAttractions] = useState<Attraction[]>(attractionsExamples);
+  // noinspection JSUnusedLocalSymbols
   const [panelVisible, setPanelVisible] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');

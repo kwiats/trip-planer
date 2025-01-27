@@ -7,13 +7,13 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { DrawerParamList } from "../../../../routers/DrawerParamList";
 
-type routesListProps = {
+type RoutesListProps = {
   short: boolean;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const RoutesList: React.FC<routesListProps> = ({ short, isOpen, onClose }) => {
+const RoutesList: React.FC<RoutesListProps> = ({ short, isOpen, onClose }) => {
   const [userRoutes, setUserRoutes] = useState<Route[]>(routesExample);
   const navigation = useNavigation<NativeStackNavigationProp<DrawerParamList>>();
 
@@ -30,10 +30,9 @@ const RoutesList: React.FC<routesListProps> = ({ short, isOpen, onClose }) => {
               setRoutes={setUserRoutes}
               onShowOnMap={() => console.log('Show on map')}
               onShowDetails={(target) => {
-                // console.log(route);
                 navigation.navigate('Route Details', { target });
               }}
-              onDeleteRoute={() => console.log('Delete route')}
+              onDeleteRoute={(target) => setUserRoutes(userRoutes.filter(route => route.id !== target.id))}
           />
       }
       {short &&

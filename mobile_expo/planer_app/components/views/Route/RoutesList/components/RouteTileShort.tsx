@@ -12,14 +12,14 @@ import {
 } from "react-native";
 import { routesList as styles } from "../../styles";
 
-interface routeListProps {
+interface RouteListProps {
   routes: Route[];
   setRoutes: React.Dispatch<React.SetStateAction<Route[]>>;
   isOpen: boolean;
   onClose: (id: number) => void;
 }
 
-export const RouteTileShort: React.FC<(routeListProps)> = ({ routes, setRoutes, isOpen, onClose }) => {
+export const RouteTileShort: React.FC<(RouteListProps)> = ({ routes, setRoutes, isOpen, onClose }) => {
   const [newRouteName, setNewRouteName] = useState("");
   const [isModalVisible, setModalVisible] = useState(isOpen);
 

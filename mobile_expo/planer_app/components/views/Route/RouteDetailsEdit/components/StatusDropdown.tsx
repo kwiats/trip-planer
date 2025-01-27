@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { getStatusIcon } from "../../../../utils/statusIcon";
-import {dropdown as styles} from "../../styles";
+import { dropdown as styles } from "../../styles";
 
 interface StatusDropdownProps {
   currentStatus: string;

@@ -8,7 +8,7 @@ import { getStatusIcon } from "../../../utils/statusIcon";
 import AttractionTile from "./components/AttractionTile";
 import StatusDropdown from "./components/StatusDropdown";
 
-interface routeDetailsProps {
+interface RouteDetailsProps {
   route: {
     params: {
       target: Route;
@@ -16,7 +16,7 @@ interface routeDetailsProps {
   }
 }
 
-const RouteDetails: React.FC<routeDetailsProps> = ({ route }) => {
+const RouteDetails: React.FC<RouteDetailsProps> = ({ route }) => {
 
   const { target } = route.params;
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -27,17 +27,10 @@ const RouteDetails: React.FC<routeDetailsProps> = ({ route }) => {
   }, [target]);
 
   const handleApplyChanges = () => {
-    console.log('change route: ', targetRoute.id);
-    setIsEditing(false);
-  };
-
-  const handleAbortChanges = () => {
-    setTargetRoute(target);
     setIsEditing(false);
   };
 
   const onRemoveAttraction = (attraction: Attraction) => {
-    console.log('remove attraction: ', attraction.id);
     setTargetRoute((prev) => ({
       ...prev,
       attractions: prev.attractions.filter((attr) => attr.id !== attraction.id),

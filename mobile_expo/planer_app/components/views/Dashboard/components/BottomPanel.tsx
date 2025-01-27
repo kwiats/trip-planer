@@ -54,11 +54,7 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
   const navigation = useNavigation<NavigationProps>();
 
   useEffect(() => {
-    if (headAttraction) {
-      sheetRef.current?.snapToIndex(1);
-    } else {
-      sheetRef.current?.snapToIndex(0);
-    }
+    sheetRef.current?.snapToIndex(headAttraction ? 1 : 0);
   }, [headAttraction]);
 
   return (
@@ -71,7 +67,7 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
                     place_description: headAttraction.description,
                     place_category: headAttraction.category,
                     place_rating: headAttraction.rating.toFixed(1),
-                    image_url:
+                    image_url: headAttraction.image_url ||
                       'https://media.cntraveler.com/photos/58de89946c3567139f9b6cca/16:9/w_1920,c_limit/GettyImages-468366251.jpg'
                   }}/>
               <View style={styles.buttonContainer}>
@@ -114,7 +110,7 @@ const BottomPanel: React.FC<BottomPanelProps> = ({
                         place_description: attraction.description,
                         place_category: attraction.category,
                         place_rating: attraction.rating.toFixed(1),
-                        image_url:
+                        image_url: attraction.image_url ||
                           'https://media.cntraveler.com/photos/58de89946c3567139f9b6cca/16:9/w_1920,c_limit/GettyImages-468366251.jpg'
                       }}
                     />
