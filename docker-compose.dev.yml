@@ -1,7 +1,8 @@
 services:
     postgres:
         container_name: postgres-triplane
-        image: postgres:14.6
+#        image: postgres:14.6
+        image: postgis/postgis:14-3.1
         hostname: postgres
         ports:
             - "5432:5432"
@@ -10,9 +11,11 @@ services:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: triplane
             POSTGRES_DB: postgres-triplane
+            USE_GEOS: 1
+            USE_PROJ: 1
+            USE_STATS: 1
         volumes:
             - postgres_data:/var/lib/postgresql/data
-        restart: on-failure
         profiles: ["dev"]
         healthcheck:
             test: [ "CMD", "pg_isready", "-U", "postgres" ]

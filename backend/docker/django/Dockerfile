@@ -1,10 +1,9 @@
 # Stage 1
-FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS base
+FROM python:3.12-slim AS builder
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Sync the project into a new environment
 WORKDIR /app
 
-# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONBUFFERED=1
 
@@ -17,24 +16,36 @@ RUN apt-get update \
     libpq-dev \
     libpq5 \
     build-essential \
+    gdal-bin \
+    libgdal-dev \
+    binutils \
+    libproj-dev \
+    libgeos++-dev \
+    proj-bin \
     && rm -rf /var/lib/apt/lists/*
 
-# Add uv to the path
 ENV PATH="/root/.local/bin/:$PATH"
 
 # Stage 2
-FROM base AS dependencies
+FROM builder AS dependencies
 
 # Install the project's dependencies using the lockfile and settings
 COPY pyproject.toml uv.lock /app/
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-install-project # --no-dev
-
+    uv sync --frozen --no-install-project
 
 # Stage 3
 FROM python:3.12-slim AS final
+
+# Install GDAL and other required system libraries in the final stage
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    libpq5 \
+    gdal-bin \
+    libgdal32 \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy the built project
 COPY --from=dependencies /app /app
@@ -45,9 +56,10 @@ COPY ./src /app/src
 WORKDIR /app/src
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONBUFFERED=1 \
-    PATH="/app/.venv/bin:$PATH"
-
-
+    PATH="/app/.venv/bin:$PATH" \
+    # Set GDAL environment variables
+    GDAL_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgdal.so \
+    GEOS_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgeos_c.so
 
 COPY ./docker/entrypoint.sh /entrypoint.sh
 RUN sed -i 's/\r$//g' /entrypoint.sh && chmod +x /entrypoint.sh
