@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { routesDetails as styles } from "../styles";
-import {Attraction} from "../../Attraction/types";
+import { Attraction } from "../../Attraction/types";
 import { Route } from "../types";
+import { getStatusIcon } from "../../../utils/statusIcon";
+import AttractionTile from "./components/AttractionTile";
+import StatusDropdown from "./components/StatusDropdown";
 
 interface routeDetailsProps {
   route: {
     params: {
       target: Route;
-      onUpdateRoute: (updatedRoute: Route) => void;
     }
   }
 }
@@ -18,97 +20,121 @@ const RouteDetails: React.FC<routeDetailsProps> = ({ route }) => {
 
   const { target } = route.params;
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [editedRoute, setEditedRoute] = useState<Route>(target);
+  const [targetRoute, setTargetRoute] = useState<Route>(target);
+
+  useEffect(() => {
+    setTargetRoute(target);
+  }, [target]);
 
   const handleApplyChanges = () => {
-    // onUpdateRoute(editedRoute);
+    console.log('change route: ', targetRoute.id);
     setIsEditing(false);
   };
 
   const handleAbortChanges = () => {
-    setEditedRoute(target);
+    setTargetRoute(target);
     setIsEditing(false);
   };
 
-  const renderAttractionItem = ({ item, drag }: { item: Attraction; drag: () => void }) => (
-    <TouchableOpacity
-      style={styles.attractionItem}
-      onLongPress={isEditing ? drag : undefined}
-    >
-      <Text style={styles.attractionName}>{item.name}</Text>
-      {isEditing && (
-        <TouchableOpacity
-          style={styles.removeButton}
-          onPress={() =>
-            setEditedRoute((prev) => ({
-              ...prev,
-              attractions: prev.attractions.filter((attr) => attr.id !== item.id),
-            }))
-          }
-        >
-          <Text style={styles.removeButtonText}>Remove</Text>
-        </TouchableOpacity>
-      )}
-    </TouchableOpacity>
-  );
+  const onRemoveAttraction = (attraction: Attraction) => {
+    console.log('remove attraction: ', attraction.id);
+    setTargetRoute((prev) => ({
+      ...prev,
+      attractions: prev.attractions.filter((attr) => attr.id !== attraction.id),
+    }))
+  }
+
+  const renderEditAttractionTile = ({ item, drag, isActive }: {
+    item: Attraction;
+    drag: () => void;
+    isActive: boolean;
+  }) => {
+    return (
+      <TouchableOpacity onLongPress={drag} disabled={isActive}>
+        <AttractionTile
+          attraction={item}
+          editeMode={isEditing}
+          onRemove={() => onRemoveAttraction(item)}
+        />
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
       {isEditing ? (
         <View>
-          <TextInput
-            style={styles.input}
-            value={editedRoute.name}
-            onChangeText={(text) =>
-              setEditedRoute((prev) => ({ ...prev, name: text }))
-            }
-            placeholder="Route Name"
-          />
-          <TextInput
-            style={styles.textArea}
-            value={editedRoute.description}
-            onChangeText={(text) =>
-              setEditedRoute((prev) => ({ ...prev, description: text }))
-            }
-            placeholder="Route Description"
-            multiline
-          />
-          <DraggableFlatList
-            data={editedRoute.attractions}
-            keyExtractor={(item) => item.id.toString()}
-            onDragEnd={({ data }) =>
-              setEditedRoute((prev) => ({ ...prev, attractions: data }))
-            }
-            renderItem={renderAttractionItem}
-          />
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.applyButton} onPress={handleApplyChanges}>
-              <Text style={styles.applyButtonText}>Apply</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.abortButton} onPress={handleAbortChanges}>
-              <Text style={styles.abortButtonText}>Abort</Text>
+          <View style={styles.titleContainer}>
+            <TextInput
+              style={styles.titleInput}
+              value={targetRoute.name}
+              onChangeText={(text) =>
+                setTargetRoute((prev) => ({ ...prev, name: text }))
+              }
+              placeholder="Route Name"
+            />
+            <StatusDropdown currentStatus={targetRoute.status} onStatusChange={(S) =>
+              setTargetRoute((prev) => ({ ...prev, status: S }))
+            }/>
+            <TouchableOpacity
+              style={styles.applyButton}
+              onPress={() => {
+                handleApplyChanges()
+                setIsEditing(false);
+              }}
+            >
+              <Text style={styles.applyButtonText}>✅</Text>
             </TouchableOpacity>
           </View>
+          <View style={styles.inputBorder}>
+            <View style={styles.descriptionContainer}>
+              <TextInput
+                style={styles.descriptionInput}
+                value={targetRoute.description != "null" ?
+                  targetRoute.description :
+                  "// not described //"}
+                onChangeText={(text) =>
+                  setTargetRoute((prev) => ({ ...prev, description: text }))
+                }
+                placeholder="Route Description"
+                multiline
+              />
+            </View>
+          </View>
+          <DraggableFlatList
+            data={targetRoute.attractions}
+            keyExtractor={(item) => item.id.toString()}
+            onDragEnd={({ data }) =>
+              setTargetRoute((prev) => ({ ...prev, attractions: data }))
+            }
+            renderItem={renderEditAttractionTile}
+          />
         </View>
       ) : (
         <View>
-          <Text style={styles.title}>{target.name}</Text>
-          <Text style={styles.description}>{target.description}</Text>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>{targetRoute.name}</Text>
+            <Text style={styles.statusIcon}>{getStatusIcon(targetRoute.status)}</Text>
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => setIsEditing(true)}
+            >
+              <Text style={styles.editButtonText}>Edit</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.descriptionContainer}>
+            <Text style={styles.description}>{targetRoute.description != "null" ?
+              targetRoute.description :
+              "// not described //"}
+            </Text>
+          </View>
           <FlatList
-            data={target.attractions}
+            data={targetRoute.attractions}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <View style={styles.attractionItem}>
-                <Text style={styles.attractionName}>{item.name}</Text>
-              </View>
+              <AttractionTile attraction={item} editeMode={isEditing}/>
             )}
           />
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => setIsEditing(true)}
-          >
-            <Text style={styles.editButtonText}>Edit</Text>
-          </TouchableOpacity>
         </View>
       )}
     </View>

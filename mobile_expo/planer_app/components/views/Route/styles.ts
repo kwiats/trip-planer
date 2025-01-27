@@ -112,15 +112,47 @@ export const routesDetails = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
   },
+  inputBorder: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+  },
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: 'baseline',
+    justifyContent: "space-between",
+    padding: 10
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 8,
+    width: '50%'
+  },
+  titleInput: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    width: '50%',
+    marginBottom: 8,
+  },
+  statusIcon: {
+    fontSize: 30,
+    fontWeight: 'bold'
+  },
+  descriptionContainer: {
+    width: '100%',
+    height: 40,
+    marginBottom: 16,
   },
   description: {
     fontSize: 16,
     color: '#666',
-    marginBottom: 16,
+  },
+  descriptionInput: {
+    fontSize: 16,
+    color: '#666',
+    fontStyle: 'italic',
   },
   attractionItem: {
     padding: 12,
@@ -166,6 +198,7 @@ export const routesDetails = StyleSheet.create({
     marginTop: 16,
   },
   editButton: {
+    alignSelf: 'flex-end',
     backgroundColor: '#007bff',
     padding: 12,
     borderRadius: 8,
@@ -175,16 +208,12 @@ export const routesDetails = StyleSheet.create({
     fontSize: 16,
   },
   applyButton: {
-    backgroundColor: '#28a745',
-    padding: 12,
-    borderRadius: 8,
-    flex: 1,
-    marginRight: 8,
+    alignSelf: 'flex-end',
+    justifyContent: 'center',
+    paddingBottom: 18,
   },
   applyButtonText: {
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 16,
+    fontSize: 36,
   },
   abortButton: {
     backgroundColor: '#dc3545',
@@ -196,5 +225,119 @@ export const routesDetails = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
     fontSize: 16,
+  },
+});
+
+export const attractionTileStyles = StyleSheet.create(
+  {
+    attractionTile: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      backgroundColor: '#fff',
+      padding: 10,
+      marginVertical: 5,
+      borderRadius: 10,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 3,
+      elevation: 2,
+      width: '100%',
+    },
+    leftContainer: {
+      flexDirection: 'row',
+      flex: 1,
+      alignItems: 'center',
+    },
+    imageContainer: {
+      marginRight: 15,
+    },
+    image: {
+      width: 50,
+      height: 50,
+      borderRadius: 15,
+    },
+    emptyImage: {
+      width: 50,
+      height: 50,
+      borderRadius: 15,
+      borderWidth: 1,
+      borderColor: '#000',
+      backgroundColor: 'transparent',
+    },
+    textContainer: {
+      flexShrink: 1,
+    },
+    title: {
+      fontWeight: 'bold',
+      fontSize: 18,
+      color: '#000',
+    },
+    subInfoContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 10,
+    },
+    subInfo: {
+      fontSize: 14,
+      color: 'gray',
+    },
+    rate: {
+      fontSize: 21,
+      fontWeight: 'bold',
+      color: '#FFD700',
+      marginRight: 10,
+    },
+    handle: {
+      marginRight: 10,
+      marginLeft: -5,
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: 'gray'
+    },
+    remove: {
+      marginRight: -5,
+      marginLeft: 5,
+      fontSize: 21,
+      fontWeight: 'bold',
+      color: 'red',
+    }
+  });
+
+export const dropdown = StyleSheet.create({
+  container: {
+    position: "relative",
+    zIndex: 1,
+  },
+  selectedStatus: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+  },
+  statusIcon: {
+    fontSize: 30,
+  },
+  dropdown: {
+    position: "absolute",
+    top: 50,
+    left: 0,
+    right: 0,
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 5,
+  },
+  dropdownItem: {
+    padding: 10,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  dropdownText: {
+    fontSize: 18,
   },
 });

@@ -11,6 +11,7 @@ import {
   View
 } from "react-native";
 import { routesList as styles } from "../../styles";
+import { getStatusIcon } from "../../../../utils/statusIcon";
 
 interface routeListProps {
   routes: Route[];
@@ -60,19 +61,6 @@ export const RouteTileFull: React.FC<(routeListProps)> = ({
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "new":
-        return "🆕";
-      case "active":
-        return "▶️";
-      case "completed":
-        return "🏁";
-      default:
-        return "❓";
-    }
-  };
-
   return (
     <KeyboardAvoidingView
       style={styles.contentContainer}
@@ -109,7 +97,10 @@ export const RouteTileFull: React.FC<(routeListProps)> = ({
                   </TouchableOpacity>}
                   <TouchableOpacity
                     style={styles.actionButton}
-                    onPress={() => onShowDetails(route)}
+                    onPress={() => {
+                      setSelectedRouteId(null);
+                      onShowDetails(route);
+                    }}
                   >
                     <Text style={styles.actionButtonText}>{route.status ==='new' ? 'Create' : 'Details'}</Text>
                   </TouchableOpacity>
