@@ -5,9 +5,11 @@ import MapboxBoard from './components/MapBoard';
 
 const Dashboard = () => {
   return (
-    <View style={styles.page}>
-      <MapboxBoard />
-    </View>
+    <>
+      <View style={styles.page}>
+        <MapboxBoard/>
+      </View>
+    </>
   );
 };
 

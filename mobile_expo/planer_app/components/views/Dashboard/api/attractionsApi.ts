@@ -1,4 +1,4 @@
-import {Attraction} from "../../Attractions/types";
+import {Attraction} from "../../Attraction/types";
 
 export const fetchAttractions = (
   city: string,

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import AttractionSubMenu from '../../components/views/Attractions/Router';
+import AttractionSubMenu from '../../components/views/Attraction/Router';
 import TestSubMenu from '../../components/views/test/Router';
 import { AuthContext } from "../../contexts/AuthContext";
 

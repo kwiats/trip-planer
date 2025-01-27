@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import { Text, View, ScrollView, Image, TouchableOpacity, Modal } from 'react-native';
+import { Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { makeGetMessage } from './api/apiService';
 import { UserCredentials } from './types';
 import { AuthContext } from '../../../contexts/AuthContext';

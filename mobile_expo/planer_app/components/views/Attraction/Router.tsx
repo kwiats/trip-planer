@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { DrawerItem, DrawerNavigationProp } from '@react-navigation/drawer';
 import { View } from 'react-native';
 
-type DrawerParamList = {
-  Search: any;
-  AddNew: any;
+type DrawerSubList = {
+  SearchAttraction: any;
+  AddNewAttraction: any;
 };
 
 type AttractionSubMenuProps = {
-  navigation: DrawerNavigationProp<DrawerParamList>;
+  navigation: DrawerNavigationProp<DrawerSubList>;
 };
 
 const AttractionSubMenu: React.FC<AttractionSubMenuProps> = (props) => {
@@ -26,14 +26,14 @@ const AttractionSubMenu: React.FC<AttractionSubMenuProps> = (props) => {
         <DrawerItem
           label="Search"
           onPress={() => {
-            navigation.navigate('Search');
+            navigation.navigate('SearchAttraction');
             setNestedMenuToggle(false);
           }}
         />
         <DrawerItem
           label="Add new"
           onPress={() => {
-            navigation.navigate('AddNew');
+            navigation.navigate('AddNewAttraction');
             setNestedMenuToggle(false);
           }}
         />

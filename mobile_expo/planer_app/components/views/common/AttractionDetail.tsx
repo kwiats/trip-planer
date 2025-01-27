@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { imagePlaceholder, attractionDetails } from './styles';
-import { Attraction, NavigationProps, Opinion } from '../Attractions/types';
-import { fetchAttraction } from '../Attractions/api/attractionsApi';
-import { attractionsExamples } from '../Attractions/api/fake/apiMock';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { attractionDetails, imagePlaceholder } from './styles';
+import { Attraction, NavigationProps, Opinion } from '../Attraction/types';
+import { fetchAttraction } from '../Attraction/api/attractionsApi';
+import { attractionsExamples } from '../Attraction/api/fake/apiMock';
 import EditSubMenuModal from './components/details/edit/EditSubMenu';
 import ReviewsModal from './components/details/review/ReviewsModal';
+import RoutesList from "../Route/RoutesList/RoutesList";
 
 type AttractionDetailsPops = {
   route: { params: { id: number } };
@@ -18,6 +19,7 @@ const AttractionDetailScreen: React.FC<AttractionDetailsPops> = ({ route, naviga
   const [favorite, setFavorite] = useState<boolean>(false);
   const [editMenuVisible, setEditMenuVisible] = useState<boolean>(false);
   const [reviewsModalVisible, setReviewsModalVisible] = useState<boolean>(false);
+  const [routesListVisible, setRoutesListVisible] = useState<boolean>(false);
   const userId = 1; //ToDo it's temporary
 
   useEffect(() => {
@@ -31,7 +33,7 @@ const AttractionDetailScreen: React.FC<AttractionDetailsPops> = ({ route, naviga
     //Add another fetches
     setAttractionImages(
       Array.from({ length: 3 }, (_, index) => (
-        <View key={index} style={imagePlaceholder.placeholder} />
+        <View key={index} style={imagePlaceholder.placeholder}/>
       ))
     );
   }, [route.params.id]);
@@ -104,7 +106,9 @@ const AttractionDetailScreen: React.FC<AttractionDetailsPops> = ({ route, naviga
       </ScrollView>
 
       <View style={attractionDetails.buttonsContainer}>
-        <TouchableOpacity style={attractionDetails.addToRouteButton}>
+        <TouchableOpacity
+          style={attractionDetails.addToRouteButton}
+          onPress={() => setRoutesListVisible(!routesListVisible)}>
           <Text style={attractionDetails.addToRouteText}>Add to route</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -113,6 +117,7 @@ const AttractionDetailScreen: React.FC<AttractionDetailsPops> = ({ route, naviga
           <Text style={attractionDetails.favoriteText}>{favorite ? '❤️' : '♡'}</Text>
         </TouchableOpacity>
       </View>
+      <RoutesList short={true} isOpen={routesListVisible} onClose={() => setRoutesListVisible(!routesListVisible)}/>
     </>
   ) : (
     <Text> Loading or something else</Text>

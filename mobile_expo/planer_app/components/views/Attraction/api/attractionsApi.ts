@@ -69,7 +69,7 @@ export const createAttraction = async (
   } catch (error) {
     console.error('Error posting attraction:', error);
     throw error;
-  };
+  }
 };
 
 export const createOpinion = async (
@@ -87,7 +87,7 @@ export const createOpinion = async (
   } catch (error) {
     console.error('Error posting opinion:', error);
     throw error;
-  };
+  }
 };
 
 export const updateAttraction = async (
@@ -140,7 +140,7 @@ export const deleteAttraction = async (
     const data = await response.json();
     return data as String;
   } catch (error) {
-    console.error('Error deleteing attraction:', error);
+    console.error('Error deleting attraction:', error);
     throw error;
   }
 };
@@ -158,7 +158,7 @@ export const deleteOpinion = async (
     const data = await response.json();
     return data as String;
   } catch (error) {
-    console.error('Error deleteing opinion:', error);
+    console.error('Error deleting opinion:', error);
     throw error;
   }
 };
