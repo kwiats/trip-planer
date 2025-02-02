@@ -259,7 +259,7 @@ export const attractionDetails = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-export const reviewModal = StyleSheet.create({
+StyleSheet.create({
   backArrow: {
     fontFamily: 'Inter',
     fontSize: 48,
@@ -313,7 +313,7 @@ export const reviewModal = StyleSheet.create({
     fontWeight: 'bold'
   },
 });
-export const reviewTile = StyleSheet.create({
+StyleSheet.create({
   reviewTile: {
     backgroundColor: '#F8F8F8',
     padding: 10,

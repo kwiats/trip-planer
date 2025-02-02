@@ -82,7 +82,7 @@ export const attractionTileStyles = StyleSheet.create({
     fontSize: 20,
   },
 });
-export const imagePlaceholder = StyleSheet.create({
+StyleSheet.create({
   imageContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

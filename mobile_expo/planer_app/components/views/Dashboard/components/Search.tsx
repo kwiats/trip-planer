@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, Alert, Keyboard } from 'react-native';
+import React from 'react';
+import { View, TextInput, TouchableOpacity, Text, Keyboard } from 'react-native';
 import { styles } from '../styles';
 import { fetchAttractions } from '../api/attractionsApi';
 import { fetchLocationFromNominatim } from "../api/nominatimApi";

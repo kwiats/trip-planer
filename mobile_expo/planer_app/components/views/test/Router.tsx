@@ -1,10 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {DrawerItem} from '@react-navigation/drawer';
 import { View } from "react-native";
 
 
 
-const TestSubMenu: React.FC<any> = (props) => {
+const TestSubMenu: React.FC<any> = () => {
     const [nestedMenuOpen, setNestedMenuOpen] = useState(false);
 
     return(

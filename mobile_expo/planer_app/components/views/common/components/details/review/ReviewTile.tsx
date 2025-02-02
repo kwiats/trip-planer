@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { reviewTile } from './styles';
-import { Opinion } from '../../../../Attractions/types';
+import { Opinion } from '../../../../Attraction/types';
 import EditSubMenuModal from '../edit/EditSubMenu';
 
 interface AttractionTileProps {
