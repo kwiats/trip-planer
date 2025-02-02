@@ -1,6 +1,8 @@
 from drf_spectacular.utils import OpenApiExample, extend_schema
+from requests import Response
 from rest_framework import generics, mixins, permissions
 
+from apps.attractions.models import Attraction
 from apps.threads.models import Comment, Review
 from apps.threads.serializers import CommentSerializer, ReviewSerializer
 
@@ -22,19 +24,6 @@ class ReviewCreateView(
         tags=["reviews"],
         request=ReviewSerializer,
         responses=ReviewSerializer,
-        examples=[
-            OpenApiExample(
-                name="Create review example",
-                value={
-                    "rating": 5,
-                    "price": "1258.00",
-                    "time_spent": "03:20:00",
-                    "title": "string",
-                    "description": "string",
-                    "attraction": 1,
-                },
-            )
-        ],
     )
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -90,12 +79,6 @@ class CommentCreateView(
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        return Comment.objects.prefetch_related("review").all()
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
     @extend_schema(
         tags=["comments"],
         request=CommentSerializer,
@@ -103,6 +86,9 @@ class CommentCreateView(
     )
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class CommentDetailView(

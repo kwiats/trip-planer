@@ -3,7 +3,7 @@ name = "backend"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = [
     "boto3>=1.35.97",
     "dj-database-url>=2.3.0",
@@ -14,18 +14,29 @@ dependencies = [
     "django==4.2",
     "djangorestframework-simplejwt>=5.4.0",
     "djangorestframework>=3.15.2",
+    "numpy>=2.2.2",
     "pillow>=11.1.0",
+    "pip>=25.0",
     "psycopg2-binary>=2.9.10",
     "rich>=13.9.4",
 ]
-
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "django-debug-toolbar>=4.3.0",
     "drf-spectacular>=0.28.0",
+]
+lint = [
     "ruff>=0.9.1",
 ]
-
+test = [
+    "factory-boy>=3.3.1",
+    "pytest-cov>=6.0.0",
+    "pytest-django>=4.9.0",
+    "pytest>=8.3.4",
+    "pytest-mock>=3.14.0",
+    "moto>=5.0.27",
+    "localstack>=4.1.0",
+]
 
 [tool.ruff]
 exclude = [
@@ -93,3 +104,19 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 docstring-code-format = false
 docstring-code-line-length = "dynamic"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "core.settings.testing"
+pythonpath = ["src/tests"]
+python_files = "tests.py test_*.py *_tests.py"
+addopts = [
+    "-v",
+    "-s",
+    "no:warnings",
+    "--cov=.",
+    "--cov-report=term-missing",
+    "--import-mode=importlib",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]

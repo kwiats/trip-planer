@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.attractions.models import Attraction, Category
@@ -24,7 +25,12 @@ class AttractionSerializer(serializers.ModelSerializer):
         write_only=True,
         required=False,
     )
-    categories = serializers.SerializerMethodField()
+    categories = serializers.SerializerMethodField(read_only=True)
+
+    rating = serializers.SerializerMethodField(read_only=True)
+    time_spent = serializers.SerializerMethodField(read_only=True)
+    price = serializers.SerializerMethodField(read_only=True)
+    visits = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Attraction
@@ -52,30 +58,50 @@ class AttractionSerializer(serializers.ModelSerializer):
     def get_categories(self, obj) -> list[str]:  # noqa
         return [category.name for category in obj.categories.all()]
 
+    @extend_schema_field(serializers.FloatField())
+    def get_rating(self, obj):
+        return obj.rating
+
+    @extend_schema_field(serializers.FloatField())
+    def get_time_spent(self, obj):
+        return obj.time_spent
+
+    @extend_schema_field(serializers.FloatField())
+    def get_price(self, obj):
+        return obj.price
+
+    @extend_schema_field(serializers.IntegerField())
+    def get_visits(self, obj):
+        return obj.visits
+
     def create(self, validated_data):
-        validated_data["user"] = self.context["request"].user
+        user = validated_data.pop("user")
         categories_names = validated_data.pop("add_categories", [])
-        attraction = super().create(validated_data)
+        attraction = Attraction.objects.create(user=user, **validated_data)
         categories = []
         for name in categories_names:
-            category, created = Category.objects.get_or_create(name=name)
+            category, _ = Category.objects.get_or_create(name=name)
             categories.append(category)
-        attraction.categories.set(categories)
+        attraction.categories.add(*categories)
+        attraction.save()
         return attraction
 
     def update(self, instance, validated_data):
-        validated_data["user"] = self.context["request"].user
+        instance.user = validated_data.pop("user", instance.user)
         categories_names = validated_data.pop("add_categories", [])
+
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        instance.save()
 
         if categories_names:
             categories = []
             for name in categories_names:
-                category, created = Category.objects.get_or_create(name=name)
+                category, _ = Category.objects.get_or_create(name=name)
                 categories.append(category)
             instance.categories.set(categories)
 
-        return super().update(instance, validated_data)
-
+        return instance
 
 class AttractionImagesSerializer(serializers.ModelSerializer):
     images_urls = serializers.SerializerMethodField()

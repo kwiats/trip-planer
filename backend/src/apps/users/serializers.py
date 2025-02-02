@@ -22,9 +22,7 @@ class ChangePasswordSerializer(serializers.Serializer):
                 attrs["rewrite_new_password"] == attrs["old_password"],
             ]
         ):
-            raise serializers.ValidationError(
-                "New password can't be the same as the old one"
-            )
+            raise serializers.ValidationError("New password can't be the same as the old one")
 
         self._validate_password(attrs["new_password"], user)
         return attrs
@@ -52,7 +50,7 @@ class ChangeEmailSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         user = self.context["request"].user
-        if not user.check_password(attrs["old_password"]):
+        if not user.check_password(attrs["password"]):
             raise serializers.ValidationError("Wrong password")
         if attrs["new_email"] == attrs["old_email"]:
             raise serializers.ValidationError(
@@ -60,7 +58,7 @@ class ChangeEmailSerializer(serializers.Serializer):
             )
         if attrs["password"] != attrs["rewrite_password"]:
             raise serializers.ValidationError("Passwords don't match")
-        self._validate_password(attrs["new_password"], user)
+        self._validate_password(attrs["password"], user)
         return attrs
 
     @staticmethod
@@ -69,6 +67,13 @@ class ChangeEmailSerializer(serializers.Serializer):
             validate_password(password, user)
         except serializers.ValidationError as error:
             raise serializers.ValidationError(str(error))
+
+    def update(self, instance, validated_data):
+        instance = User.objects.update_user(
+            user=instance,
+            email=validated_data["new_email"],
+        )
+        return instance
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -102,30 +107,34 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "profile",
         )
+        read_only_fields = ("email", "username")
 
     def create(self, validated_data):
-        validated_data.pop("username", None)
-        first_name = validated_data.get("first_name", None)
-        last_name = validated_data.get("last_name", None)
+        profile_data = {
+            "first_name": validated_data.pop("first_name", None),
+            "last_name": validated_data.pop("last_name", None)
+        }
         user = self.context["request"].user
 
-        if not hasattr(user, "profile") and all([first_name, last_name]):
-            user.profile = Profile.objects.create_profile(
+        if not Profile.objects.filter(user=user).exists():
+            Profile.objects.create_profile(
                 user=user,
-                first_name=first_name,
-                last_name=last_name,
+                **profile_data,
             )
         else:
             raise serializers.ValidationError(
                 {
-                    "detail": "User already has a profile",
+                    "detail": "First name or/and last name are "
+                              "required to create a profile.",
                 }
             )
         return user
 
     def update(self, instance, validated_data):
-        first_name = validated_data.pop("first_name", None)
-        last_name = validated_data.pop("last_name", None)
+        profile_data = {
+            "first_name": validated_data.pop("first_name", None),
+            "last_name": validated_data.pop("last_name", None)
+        }
 
         User.objects.update_user(
             user=instance,
@@ -138,13 +147,9 @@ class UserSerializer(serializers.ModelSerializer):
                     "detail": "User doesn't have a profile",
                 }
             )
-
-        if all([first_name, last_name]):
+        else:
             Profile.objects.update_profile(
-                user=instance,
-                profile=instance.profile,
-                first_name=first_name,
-                last_name=last_name,
+                profile=instance.profile, **profile_data
             )
 
         return instance

@@ -11,7 +11,6 @@ from apps.media.utils import (
     create_file_name,
     prepare_file,
 )
-from apps.threads.models import Comment, Review
 from core.storages import MediaS3Boto3Storage
 
 
@@ -41,8 +40,10 @@ class MediaService:
         for key in BucketNamesID:
             folder_name = validated_data.get(key.value, None)
             if folder_name:
-                return folder_name.id
-        return validated_data.get("id")
+                if hasattr(folder_name, 'id'):
+                    return str(folder_name.id)
+                return str(folder_name)
+        return str(validated_data.get("id"))
 
     def _create_file_name(self, validated_data: dict[str, any]) -> str:
         file_name = validated_data["file_name"]
@@ -106,8 +107,7 @@ class MediaService:
 
     @staticmethod
     def get_media(media_id: str) -> "Media":
-        media = Media.objects.get(id=media_id)
-        return media
+        return Media.objects.get(id=media_id)
 
     def delete_media(self, media: "Media") -> None:
         filename = f"{self.get_folder_name(media)}/{media.file_name}"

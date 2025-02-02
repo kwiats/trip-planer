@@ -9,8 +9,13 @@ from apps.threads.models import Comment, Review
 
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    review_id = serializers.UUIDField(source="review.id", required=True)
-    user_id = serializers.PrimaryKeyRelatedField(source="user", read_only=True)
+    user_id = serializers.CharField(source="user.id", read_only=True)
+    review_id = serializers.PrimaryKeyRelatedField(
+        source="review",
+        queryset=Review.objects.all(),
+        required=True,
+        write_only=True,
+    )
     media = MediaSerializer(many=True, read_only=True)
 
     class Meta:
@@ -20,30 +25,29 @@ class CommentSerializer(serializers.ModelSerializer):
             "content",
             "created_at",
             "user",
-            "review_id",
             "user_id",
+            "review_id",
             "media",
         ]
         read_only_fields = [
+            "id",
             "created_at",
+            "media",
         ]
 
-    def create(self, validated_data):
-        review_id = validated_data.pop("review").get("id")
-        try:
-            review = Review.objects.get(id=review_id)
-        except Review.DoesNotExist:
-            raise serializers.ValidationError({"detail": "Review not found"})
-
-        validated_data["review"] = review
-        return super().create(validated_data)
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['review_id'] = str(instance.review.id)
+        return data
 
 
 class ReviewSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     attraction_id = serializers.PrimaryKeyRelatedField(
+        source="attraction",
         queryset=Attraction.objects.all(),
         required=True,
+        write_only=True,
     )
     media = MediaSerializer(many=True, read_only=True)
     comments = CommentSerializer(many=True, read_only=True)
@@ -66,6 +70,11 @@ class ReviewSerializer(serializers.ModelSerializer):
         read_only_fields = [
             "id",
         ]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['attraction_id'] = instance.attraction.id
+        return data
 
     def validate_rating(self, value):  # noqa
         if value < 1 or value > 5:

@@ -8,8 +8,8 @@ from apps.threads.views import (
 )
 
 urlpatterns = [
-    path("create", ReviewCreateView.as_view(), name="review-list"),
-    path("reviews/<str:id>/", ReviewDetailView.as_view(), name="review-detail"),
-    path("comment", CommentCreateView.as_view(), name="comment-list"),
+    path("create", ReviewCreateView.as_view(), name="review-create"),
+    path("<str:id>/", ReviewDetailView.as_view(), name="review-detail"),
+    path("comment", CommentCreateView.as_view(), name="comment-create"),
     path("comment/<str:id>/", CommentDetailView.as_view(), name="comment-detail"),
 ]

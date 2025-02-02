@@ -16,6 +16,8 @@ class Profile(models.Model):
 
     @property
     def full_name(self):
+        if not self.first_name or not self.last_name:
+            return ""
         return f"{self.first_name} {self.last_name}"
 
     def __str__(self):

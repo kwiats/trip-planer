@@ -40,14 +40,13 @@ CACHE_STORAGE_EXP=86400
 ### build app
 
 ```bash
-docker-compose --profile dev up --build -d
-docker-compose --profile dev stop
+docker-compose up --build -d
 ```
 
 ### debug with docker pdb++
 
 ```bash
-docker-compose run --rm --service-ports backend
+docker-compose run --rm --service-ports django
 ```
 
 or
@@ -59,53 +58,14 @@ or
 ### run containers to vscode or pycharm ide then step debug
 
 ```bash
-docker-compose --profile dev-less start
+docker-compose --profile dev up 
 ```
 
-### debug with vscode
-- add in project dir ".vscode/launch.json"
-
-```json
-{
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "FastAPI",
-            "cwd": "${workspaceFolder}/backend",
-            "type": "debugpy",
-            "request": "launch",
-            "module": "uvicorn",
-            "args": [
-                "src.main:app",
-                "--host",
-                "127.0.0.1",
-                "--port",
-                "8000",
-                "--reload"
-            ],
-            "envFile": "${workspaceFolder}/backend/.env"
-        },
-        {
-            "name": "FastAPI local",
-            "cwd": "${workspaceFolder}/backend",
-            "type": "debugpy",
-            "request": "launch",
-            "module": "uvicorn",
-            "args": [
-                "src.main:app",
-                "--host",
-                "127.0.0.1",
-                "--port",
-                "8080",
-                "--reload"
-            ]
-        }
-    ]
-}
-```
-
-### debug with pycharm
+### run pytest
 
 ```bash
-python ./backend/src/run_app.py
+docker-compose --profile test up
+docker-compose --profile test run --rm test sh -c "uv run pytest -v --disable-pytest-warnings"
+docker-compose --profile test run --rm test sh -c "uv run pytest -v -k <test-name>"
+docker-compose --profile test run --rm test sh -c "uv run pytest -v -p no:cov --disable-pytest-warnings"
 ```

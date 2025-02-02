@@ -66,14 +66,25 @@ class MediaS3Boto3Storage:
             if any(host in self.endpoint_url for host in settings.ALLOWED_HOSTS):
                 self.client.create_bucket(Bucket=bucket_name)
             else:
-                self.client.create_bucket(
-                    Bucket=bucket_name,
-                    CreateBucketConfiguration={"LocationConstraint": region_name},
-                )
+                if region_name is None:
+                    self.client.create_bucket(Bucket=bucket_name)
+                else:
+                    self.client.create_bucket(
+                        Bucket=bucket_name,
+                        CreateBucketConfiguration={"LocationConstraint": region_name},
+                    )
 
-    def is_bucket_exists(self, bucket_name: str) -> bool:
+    def is_bucket_exists(self, bucket_name: str) -> bool: # noqa
         try:
             self.client.head_bucket(Bucket=bucket_name)
+            return True
+        except ClientError as error:
+            if error.response["Error"]["Code"] == "404":
+                return False
+
+    def is_file_exists(self, bucket_name: str, filename: str) -> bool: # noqa
+        try:
+            self.client.head_object(Bucket=bucket_name, Key=filename)
             return True
         except ClientError as error:
             if error.response["Error"]["Code"] == "404":
@@ -124,9 +135,8 @@ class MediaS3Boto3Storage:
 
         try:
             response = self.client.get_object(Bucket=bucket_name, Key=filename)
-            with response:
-                data_stream = io.BytesIO(response.data)
-                data = data_stream.read()
+
+            data = response['Body'].read()
             return data
         except ClientError as error:
             logging.error(
@@ -177,3 +187,25 @@ class MediaS3Boto3Storage:
         url_link = f"{self.endpoint_url}/{bucket_name}/{filename}"
 
         return url_link
+
+    def get_file_name(self, bucket_name: str, filename: str) -> str:
+        if not self.is_bucket_exists(bucket_name):
+            raise ValueError(f"Bucket {bucket_name} does not exist.")
+
+        return filename
+
+    def get_file_size(self, bucket_name: str, filename: str) -> int: # noqa
+        if not self.is_bucket_exists(bucket_name):
+            raise ValueError(f"Bucket {bucket_name} does not exist.")
+
+        response = self.client.head_object(Bucket=bucket_name, Key=filename)
+
+        return response["ContentLength"]
+
+    def get_file_type(self, bucket_name: str, filename: str) -> str: # noqa
+        if not self.is_bucket_exists(bucket_name):
+            raise ValueError(f"Bucket {bucket_name} does not exist.")
+
+        response = self.client.head_object(Bucket=bucket_name, Key=filename)
+
+        return response["ContentType"]

@@ -40,6 +40,8 @@ class Attraction(models.Model):
         blank=True,
     )
 
+    objects = models.Manager()
+
     @property
     def rating(self):
         return self.reviews.aggregate(rating_avg=Avg("rating")).get("rating_avg") or 0

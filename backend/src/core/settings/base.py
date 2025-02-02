@@ -1,7 +1,4 @@
 import os
-
-import dj_database_url
-
 from core.paths import *
 
 # BASIC
@@ -82,19 +79,6 @@ CACHES = {
 }
 
 # DATABASES
-# DATABASES = {
-#     "default": dj_database_url.config(
-#         default=(
-#             f"postgres://{os.environ.pop('POSTGRES_USER', 'postgres')}:"
-#             f"{os.environ.pop('POSTGRES_PASSWORD', 'triplane')}@"
-#             f"{os.environ.pop('POSTGRES_HOST', 'localhost')}:"
-#             f"{os.environ.pop('POSTGRES_PORT', '5433')}/"
-#             f"{os.environ.pop('POSTGRES_DB', 'postgres-triplane')}"
-#         ),
-#         conn_max_age=600,
-#         conn_health_checks=True,
-#     ),
-# }
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
@@ -105,6 +89,16 @@ DATABASES = {
         "PORT": os.environ.get("POSTGRES_PORT", "5433"),
     }
 }
+
+# PASSWORD HASHERS
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+    "django.contrib.auth.hashers.BCryptPasswordHasher",
+    "django.contrib.auth.hashers.CryptPasswordHasher",
+]
 
 # VALIDATORS
 AUTH_PASSWORD_VALIDATORS = [

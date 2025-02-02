@@ -11,7 +11,7 @@ class Review(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    time_spent = models.TimeField(default=datetime.time(00, 00), null=True, blank=True)
+    time_spent = models.TimeField(default=datetime.time(00, 00), null=True, blank=True, help_text="HH:MM:SS")
     title = models.CharField(max_length=255)
     description = models.TextField(max_length=1000)
 

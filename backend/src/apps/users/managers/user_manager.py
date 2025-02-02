@@ -19,7 +19,7 @@ class UserManager(BaseUserManager):
         return self.get_queryset().get(id=user_id)
 
     def get_queryset_with_profile(self) -> QuerySet["User"]:
-        return self.get_queryset().prefetch_related("profile").all()
+        return self.get_queryset().filter(profile__isnull=False).select_related("profile")
 
     def create_user(self, email: str, password: str, **extra_fields) -> "User":
         if not email:
@@ -45,9 +45,11 @@ class UserManager(BaseUserManager):
 
     def update_user(self, user: "User", **kwargs) -> "User":
         if "password" in kwargs:
-            kwargs["password"] = make_password(kwargs["password"])
+            user.set_password(kwargs["password"])
+            kwargs.pop("password")
         if "email" in kwargs:
-            kwargs["email"] = self.normalize_email(kwargs.pop("email"))
+            user.email = self.normalize_email(kwargs["email"])
+            kwargs.pop("email")
         for key, value in kwargs.items():
             setattr(user, key, value)
         user.save()

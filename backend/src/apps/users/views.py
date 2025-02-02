@@ -3,14 +3,13 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_headers
 from drf_spectacular.utils import OpenApiExample, extend_schema
 from rest_framework import generics, mixins, status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.users.models import User
 from apps.users.serializers import (
     ChangeEmailSerializer,
     ChangePasswordSerializer,
-    ProfileSerializer,
     UserSerializer,
 )
 
@@ -47,7 +46,7 @@ class ChangeEmailView(generics.GenericAPIView, mixins.UpdateModelMixin):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(
-                {"message": "Email changed successfully"},
+                {"detail": "Email changed successfully"},
                 status=status.HTTP_200_OK,
             )
         return Response(
@@ -87,7 +86,7 @@ class ChangePasswordView(generics.GenericAPIView, mixins.UpdateModelMixin):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(
-                {"message": "Password changed successfully"},
+                {"detail": "Password changed successfully"},
                 status=status.HTTP_200_OK,
             )
         return Response(
@@ -149,7 +148,7 @@ class UserCreateView(generics.CreateAPIView):
         ],
         request=UserSerializer,
         responses={
-            201: ProfileSerializer,
+            201: UserSerializer,
             400: {
                 "detail": "User already has a profile",
             },

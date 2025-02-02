@@ -1,0 +1,43 @@
+name: Backend tests
+
+env:
+    DOCKER_BUILDKIT: 1
+    COMPOSE_DOCKER_CLI_BUILD: 1
+
+on:
+    pull_request:
+        branches:
+            - main
+            - develop
+            - master
+
+    push:
+        branches:
+            - main
+            - develop
+            - master
+        ignore:
+            - ".idea"
+            - ".vscode"
+            - ".qodo"
+            - "mobile_expo/planer_app/**"
+jobs:
+    docker:
+        runs-on: ubuntu-latest
+        working-directory: ./
+        steps:
+            - name: Checkout Code Repository
+              uses: actions/checkout@v4
+            - name: Build the Stack
+              run: docker-compose build
+            - name: Tear down the Stack
+              run:  docker-compose down
+
+    pytest:
+        runs-on: ubuntu-latest
+        needs: docker
+        steps:
+            - name: Checkout Code Repository
+              uses: actions/checkout@v4
+            - name: Run Tests
+              run: docker-compose --profile test run --rm test sh -c "uv run pytest -v --disable-pytest-warnings"
