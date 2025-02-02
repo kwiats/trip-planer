@@ -42,6 +42,6 @@ jobs:
       - name: Build Tests
         run: docker compose --profile test build
       - name: Run Tests
-        run: docker compose --profile test run --rm
+        run: docker compose --profile test run --rm test sh -c "pytest -v --cov=."
       - name: Stop Docker containers
         run: docker compose down
