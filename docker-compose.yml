@@ -7,7 +7,6 @@ x-django: &django
     tty: true
     depends_on: [postgres, minio]
     env_file:
-        - .env
         - .env.development.local
     ports:
         - "8000:8000"
@@ -72,6 +71,7 @@ services:
 
     django:
         <<: *django
+        depends_on: [postgres, minio]
         profiles: ["dev"]
 
     localstack:
@@ -101,27 +101,6 @@ services:
         env_file:
             - .env.testing.local
         profiles: ["test"]
-
-#    redis:
-#        image: redis
-#        container_name: redis
-#        build:
-#            context: ./backend/docker/redis
-#            dockerfile: Dockerfile
-#        privileged: true
-#        env_file:
-#            - ./backend/.env
-#            - ./backend/.env.local
-#        ports:
-#            - "6379:6379"
-#        volumes:
-#            - redis_data:/data:rw
-#        healthcheck:
-#            test: redis-cli ping
-#            interval: 3s
-#            timeout: 5s
-#            retries: 5
-#        profiles: ["dev", "redis", "dev-less"]
 
 volumes:
     postgres_data:

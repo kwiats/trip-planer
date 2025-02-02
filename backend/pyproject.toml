@@ -107,12 +107,11 @@ docstring-code-line-length = "dynamic"
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "core.settings.testing"
-pythonpath = ["src/tests"]
+pythonpath = "src"
 python_files = "tests.py test_*.py *_tests.py"
 addopts = [
     "-v",
     "-s",
-    "no:warnings",
     "--cov=.",
     "--cov-report=term-missing",
     "--import-mode=importlib",

@@ -1,54 +1,45 @@
 name: Backend app quality
 
+env:
+    DOCKER_BUILDKIT: 1
+    COMPOSE_DOCKER_CLI_BUILD: 1
+
 on:
-    pull_request:
-      branches:
-        - dev
-        - main
-        - master
-    push:
-        paths:
-          - 'backend/**'
-        ignore:
-          - ".idea"
-          - ".vscode"
-          - ".qodo"
-          - "mobile_expo/planer_app/**"
+  pull_request:
+    branches:
+      - dev
+      - main
+      - master
+  push:
+    paths:
+      - '.github/**'
+      - 'backend/**'
 
 jobs:
-  python:
+  django:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version:
-          - "3.11.7"
+    env:
+      CPLUS_INCLUDE_PATH: /usr/include/gdal
+      C_INCLUDE_PATH: /usr/include/gdal
+      DJANGO_SETTINGS_MODULE: core.settings.development
+      ENVIRONMENT: development
+      SECRET_KEY: app_secret_key
+      DEBUG: 1
+      ALLOWED_HOSTS: "localhost,127.0.0.1"
+      POSTGRES_HOST: localhost
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: triplane
+      POSTGRES_DB: postgres-triplane
+      POSTGRES_PORT: 5432
+      STORAGE_ENDPOINT_URL: http://localhost:9000
+      STORAGE_ACCESS_KEY: superuser
+      STORAGE_SECRET_KEY: superuser
+      STORAGE_SECURE: "False"
+      STORAGE_BUCKET_NAME: files
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v4
-      - name: Ser up Python
-        uses: actions/setup-python@v5
-
-  uv:
-    runs-on: ubuntu-latest
-    needs: python
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
-
-  django:
-    runs-on: ubuntu-latest
-    needs: uv
-    env:
-      UV_PYTHON: ${{ matrix.python-version }}
-    working-directory: ./backend
-    steps:
-      - uses: actions/checkout@v4
-      - dotenv/source:
-          path: .env.development.local
-      - name: Install dev dependencies
-        run: |
-          uv sync --frozen --no-install-project --group dev
-      - name: Run django project
-        run: |
-          uv run python manage.py runserver 0.0.0.0:8000
+      - name: Django
+        run: docker compose --profile dev build
+      - name: Stop Docker containers
+        run: docker compose down

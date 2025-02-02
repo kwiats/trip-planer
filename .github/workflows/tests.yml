@@ -5,39 +5,43 @@ env:
     COMPOSE_DOCKER_CLI_BUILD: 1
 
 on:
-    pull_request:
-        branches:
-            - main
-            - develop
-            - master
+  pull_request:
+    branches:
+      - dev
+      - main
+      - master
+  push:
+    paths:
+      - '.github/**'
+      - 'backend/**'
 
-    push:
-        branches:
-            - main
-            - develop
-            - master
-        ignore:
-            - ".idea"
-            - ".vscode"
-            - ".qodo"
-            - "mobile_expo/planer_app/**"
 jobs:
-    docker:
-        runs-on: ubuntu-latest
-        working-directory: ./
-        steps:
-            - name: Checkout Code Repository
-              uses: actions/checkout@v4
-            - name: Build the Stack
-              run: docker-compose build
-            - name: Tear down the Stack
-              run:  docker-compose down
-
-    pytest:
-        runs-on: ubuntu-latest
-        needs: docker
-        steps:
-            - name: Checkout Code Repository
-              uses: actions/checkout@v4
-            - name: Run Tests
-              run: docker-compose --profile test run --rm test sh -c "uv run pytest -v --disable-pytest-warnings"
+  pytest:
+    runs-on: ubuntu-latest
+    env:
+      CPLUS_INCLUDE_PATH: /usr/include/gdal
+      C_INCLUDE_PATH: /usr/include/gdal
+      DJANGO_SETTINGS_MODULE: core.settings.development
+      ENVIRONMENT: development
+      SECRET_KEY: app_secret_key
+      DEBUG: 1
+      ALLOWED_HOSTS: "localhost,127.0.0.1"
+      POSTGRES_HOST: localhost
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: triplane
+      POSTGRES_DB: postgres-triplane
+      POSTGRES_PORT: 5432
+      STORAGE_ENDPOINT_URL: http://localhost:9000
+      STORAGE_ACCESS_KEY: superuser
+      STORAGE_SECRET_KEY: superuser
+      STORAGE_SECURE: "False"
+      STORAGE_BUCKET_NAME: files
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+      - name: Build Tests
+        run: docker compose --profile test build
+      - name: Run Tests
+        run: docker compose --profile test run --rm
+      - name: Stop Docker containers
+        run: docker compose down
