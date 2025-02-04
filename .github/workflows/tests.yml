@@ -1,4 +1,4 @@
-name: Backend app quality
+name: Backend tests
 
 env:
     DOCKER_BUILDKIT: 1
@@ -16,7 +16,7 @@ on:
       - 'backend/**'
 
 jobs:
-  django:
+  pytest:
     runs-on: ubuntu-latest
     env:
       CPLUS_INCLUDE_PATH: /usr/include/gdal
@@ -39,7 +39,9 @@ jobs:
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v4
-      - name: Django
-        run: docker compose --profile dev build
+      - name: Build Tests
+        run: docker compose --profile test build
+      - name: Run Tests
+        run: docker compose --profile test run --rm test sh -c "pytest -v --cov=."
       - name: Stop Docker containers
         run: docker compose down

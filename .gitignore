@@ -166,7 +166,7 @@ web_modules/
 
 # dotenv environment variable files
 .env
-.env.development.local
+#.env.development.local
 .env.test.local
 .env.production.local
 .env.local
@@ -889,3 +889,9 @@ Temporary Items
 
 # End of https://www.toptal.com/developers/gitignore/api.idea/python,pycharm+all,visualstudiocode,react,reactnative,node
 .idea
+
+*/static
+
+to-delete
+old_backend
+.qodo

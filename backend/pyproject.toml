@@ -1,3 +1,43 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "boto3>=1.35.97",
+    "dj-database-url>=2.3.0",
+    "dj-rest-auth[with-social]>=7.0.1",
+    "django-allauth>=65.1.0",
+    "django-cors-headers>=4.6.0",
+    "django-storages>=1.14.4",
+    "django==4.2",
+    "djangorestframework-simplejwt>=5.4.0",
+    "djangorestframework>=3.15.2",
+    "numpy>=2.2.2",
+    "pillow>=11.1.0",
+    "pip>=25.0",
+    "psycopg2-binary>=2.9.10",
+    "rich>=13.9.4",
+]
+[dependency-groups]
+dev = [
+    "django-debug-toolbar>=4.3.0",
+    "drf-spectacular>=0.28.0",
+]
+lint = [
+    "ruff>=0.9.1",
+]
+test = [
+    "factory-boy>=3.3.1",
+    "pytest-cov>=6.0.0",
+    "pytest-django>=4.9.0",
+    "pytest>=8.3.4",
+    "pytest-mock>=3.14.0",
+    "moto>=5.0.27",
+    "localstack>=4.1.0",
+]
+
 [tool.ruff]
 exclude = [
     ".bzr",
@@ -29,7 +69,8 @@ exclude = [
 ]
 line-length = 88
 indent-width = 4
-target-version = "py311"
+target-version = "py312"
+
 
 [tool.ruff.lint]
 select = [
@@ -64,44 +105,17 @@ line-ending = "auto"
 docstring-code-format = false
 docstring-code-line-length = "dynamic"
 
-[tool.mypy]
-
-plugins = ["pydantic.mypy", "sqlalchemy.ext.mypy.plugin"]
-python_version = "3.11"
-mypy_path = 'src'
-warn_return_any = true
-warn_unused_configs = true
-disable_error_code = ["empty-body"]
-exclude = [
-    '^file1\\.py$',
-    '^file2\\.py$',
-    "tests",
-    "migrations",
-    "conftest.py",
-    "factories.py",
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "core.settings.testing"
+pythonpath = "src"
+python_files = "tests.py test_*.py *_tests.py"
+addopts = [
+    "-v",
+    "-s",
+    "--cov=.",
+    "--cov-report=term-missing",
+    "--import-mode=importlib",
 ]
-follow_imports = "silent"
-warn_redundant_casts = true
-warn_unused_ignores = true
-disallow_any_generics = true
-check_untyped_defs = true
-no_implicit_reexport = true
-disallow_untyped_defs = false
-warn_no_return = true
-
-[tool.pydantic-mypy]
-init_forbid_extra = true
-init_typed = true
-warn_required_dynamic_aliases = true
-
-[[tool.mypy.overrides]]
-module = "mycode.foo.*"
-disallow_untyped_defs = true
-
-[[tool.mypy.overrides]]
-module = "mycode.bar"
-warn_return_any = false
-
-[[tool.mypy.overrides]]
-module = ["somelibrary", "some_other_library"]
-ignore_missing_imports = true
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
