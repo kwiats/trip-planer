@@ -8,7 +8,7 @@ dependencies = [
     "boto3>=1.35.97",
     "dj-database-url>=2.3.0",
     "dj-rest-auth[with-social]>=7.0.1",
-    "django-allauth>=65.1.0",
+    "django-allauth[mfa]>=65.1.0",
     "django-cors-headers>=4.6.0",
     "django-storages>=1.14.4",
     "django==4.2",
