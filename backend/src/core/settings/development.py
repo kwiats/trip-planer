@@ -15,6 +15,7 @@ INSTALLED_APPS += [
     "rest_framework_simplejwt.token_blacklist",
     "allauth",
     "allauth.account",
+    "allauth.mfa",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.facebook",
     "allauth.socialaccount.providers.github",
@@ -105,6 +106,9 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_AUTHENTICATION_METHOD = "email"
+MFA_ADAPTER = "allauth.mfa.adapter.DefaultMFAAdapter"
+MFA_TOTP_DIGITS = 6
+MFA_TOTP_PERIOD = 30
 
 # REST AUTH
 REST_AUTH = {
@@ -114,6 +118,10 @@ REST_AUTH = {
     "LOGIN_SERIALIZER": "apps.auth.serializers.LoginSerializer",
     "JWT_AUTH_COOKIE": "access-token",
     "JWT_AUTH_REFRESH_COOKIE": "refresh-token",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
 }
 
 # JWT

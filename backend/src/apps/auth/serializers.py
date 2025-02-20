@@ -1,12 +1,15 @@
-import logging
-
 from dj_rest_auth.registration.serializers import (
     RegisterSerializer as BaseRegisterSerializer,
 )
 from dj_rest_auth.serializers import LoginSerializer as BaseLoginSerializer
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-from rest_framework import exceptions, serializers
+from rest_framework import exceptions
+from rest_framework import serializers
+from urllib.parse import quote, urlencode
+from allauth.mfa.models import Authenticator
+from allauth.mfa.adapter import get_adapter
+from apps.auth.utils import generate_otp, convert_to_base64
 
 from apps.users.models import User
 
@@ -70,3 +73,88 @@ class LoginSerializer(BaseLoginSerializer):
 
         attrs["user"] = user
         return attrs
+
+
+class MFASetupSerializer(serializers.Serializer):
+    def create(self, validated_data):
+        user = self.context['request'].user
+        adapter = get_adapter()
+
+        existing_totp = Authenticator.objects.filter(
+            user=user,
+            type=Authenticator.Type.TOTP
+        ).first()
+
+        if existing_totp:
+            raise serializers.ValidationError({
+                'mfa': 'Totp is already exists'
+            })
+
+        number = generate_otp()
+        secret = convert_to_base64(number)
+
+        authenticator = Authenticator.objects.create(
+            user=user,
+            type=Authenticator.Type.TOTP,
+            data={
+                'secret': adapter.encrypt(secret),
+                'digits': settings.MFA_TOTP_DIGITS,
+                'period': settings.MFA_TOTP_PERIOD,
+                'algorithm': 'SHA1',
+                'confirmed': False
+            }
+        )
+
+        totp_url = adapter.build_totp_url(user, authenticator.data['secret'])
+
+        return {
+            'secret': secret,
+            'qr_url': totp_url
+        }
+
+    def to_representation(self, instance):
+        return {
+            'secret': instance['secret'],
+            'qr_url': instance['qr_url']
+        }
+
+
+class MFAVerifySerializer(serializers.Serializer):
+    code = serializers.CharField()
+
+    def validate(self, attrs):
+        user = self.context['request'].user
+        try:
+            authenticator = Authenticator.objects.get(
+                user=user,
+                type=Authenticator.Type.TOTP
+            )
+
+            adapter = get_adapter()
+            secret = adapter.decrypt(authenticator.data['secret'])
+
+            if secret != attrs['code']:
+                raise serializers.ValidationError({
+                    'code': 'Wrong code'
+                })
+
+            authenticator.data['confirmed'] = True
+            authenticator.save()
+
+        except Authenticator.DoesNotExist:
+            raise serializers.ValidationError({
+                'mfa': 'MFA is not enabled'
+            })
+
+        return attrs
+
+
+class MFAStatusSerializer(serializers.Serializer):
+    mfa_enabled = serializers.BooleanField(read_only=True)
+    type = serializers.CharField(read_only=True)
+
+    def to_representation(self, instance):
+        return {
+            'mfa_enabled': instance['mfa_enabled'],
+            'type': instance['type']
+        }

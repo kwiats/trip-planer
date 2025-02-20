@@ -1,5 +1,5 @@
 from dj_rest_auth.views import LogoutView
-from django.urls import include, path
+from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 
 from apps.auth.views import (
@@ -7,9 +7,15 @@ from apps.auth.views import (
     GitHubConnectView,
     LoginView,
     RegisterView,
+    MFASetupView,
+    MFAStatusView,
+    MFAVerifyView,
 )
 
 urlpatterns = [
+    path("mfa/setup/", MFASetupView.as_view(), name="mfa_setup"),
+    path("mfa/verify/", MFAVerifyView.as_view(), name="mfa_verify"),
+    path("mfa/status/", MFAStatusView.as_view(), name="mfa_status"),
     path("register/", RegisterView.as_view(), name="rest_register"),
     path("login/", LoginView.as_view(), name="rest_login"),
     path("logout/", LogoutView.as_view(), name="rest_logout"),
